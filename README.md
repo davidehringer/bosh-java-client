@@ -1,8 +1,9 @@
 # Java Client for BOSH
 
-bosh.io
+[bosh.io](http://bosh.io)
 
-Currently experimental.
+This client is currently in an beta state and subject to significant changes. Only read-only
+are supported.
 
 ## Usage
 
@@ -16,7 +17,9 @@ InputStream is = director.fetchLogs("my-deployment-backup", "my-job", 0, LogType
 Files.copy(is, Paths.get("./my-job-logs.tgz"));
 ```
 
+See `DirectorOperations` for the full API.
 
+## Compatibility
 
-    // https://github.com/cloudfoundry/bosh/blob/84252a136ddc1436bcefbbdc0e16677f1ddcff56/bosh_cli/lib/cli/commands/log_management.rb
-    // https://github.com/cloudfoundry/bosh/blob/master/bosh_cli/lib/cli/client/director.rb
+The BOSH team does not currently consider the Director API to be public and it may be subject to breaking changes
+between releases. Please test against the specific version of BOSH that you are running.
