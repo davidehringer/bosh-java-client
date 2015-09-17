@@ -22,12 +22,12 @@ import io.bosh.client.domain.DirectorInfo;
 import io.bosh.client.domain.ErrandSummary;
 import io.bosh.client.domain.LogType;
 import io.bosh.client.domain.Problem;
+import io.bosh.client.domain.Release;
 import io.bosh.client.domain.StemcellDetails;
 import io.bosh.client.domain.Task;
 import io.bosh.client.domain.Vm;
 import io.bosh.client.domain.VmDetails;
-import io.bosh.client.v2.releases.Release;
-import io.bosh.client.v2.releases.ReleaseDetails;
+import io.bosh.client.v2.releases.GetReleaseResponse;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -187,11 +187,11 @@ public class DirectorClient implements DirectorOperations {
     }
 
     @Override
-    public ReleaseDetails getRelease(String name) {
+    public GetReleaseResponse getRelease(String name) {
         LOG.debug("Getting Release '{}'", name);
         URI uri = UriComponentsBuilder.fromUri(this.root).pathSegment("releases", name).build()
                 .toUri();
-        ReleaseDetails release = restTemplate.getForObject(uri, ReleaseDetails.class);
+        GetReleaseResponse release = restTemplate.getForObject(uri, GetReleaseResponse.class);
         release.setName(name);
         return release;
     }

@@ -15,20 +15,46 @@
  */
 package io.bosh.client.v2.releases;
 
+import io.bosh.client.domain.Job;
+import io.bosh.client.domain.Package;
 
-/**
- * @author David Ehringer
- */
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GetReleaseResponse {
 
-    private final ReleaseDetails release;
+    private String name;
+    private List<Job> jobs = new ArrayList<Job>();
+    private List<Package> packages = new ArrayList<Package>();
+    private List<String> versions = new ArrayList<String>();
 
-    public GetReleaseResponse(ReleaseDetails release) {
-        this.release = release;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public ReleaseDetails getRelease() {
-        return release;
+    public String getName() {
+        return name;
+    }
+
+    public List<Job> getJobs() {
+        return jobs;
+    }
+
+    public List<Package> getPackages() {
+        return packages;
+    }
+
+    public List<String> getVersions() {
+        return versions;
+    }
+
+    @Override
+    public String toString() {
+        return "ReleaseDetails [name=" + name + ", jobs=" + jobs + ", packages=" + packages
+                + ", versions=" + versions + "]";
     }
 
 }

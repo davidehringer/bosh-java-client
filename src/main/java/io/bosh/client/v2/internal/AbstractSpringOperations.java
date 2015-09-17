@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.bosh.client.v2;
+package io.bosh.client.v2.internal;
+
+import io.bosh.client.v2.DirectorException;
 
 import java.net.URI;
 import java.util.function.Consumer;

@@ -8,10 +8,10 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import io.bosh.client.domain.Deployment;
 import io.bosh.client.domain.DirectorInfo;
 import io.bosh.client.domain.LogType;
+import io.bosh.client.domain.Release;
 import io.bosh.client.domain.Task;
 import io.bosh.client.domain.Vm;
-import io.bosh.client.v2.releases.Release;
-import io.bosh.client.v2.releases.ReleaseDetails;
+import io.bosh.client.v2.releases.GetReleaseResponse;
 
 import java.io.File;
 import java.io.IOException;
@@ -119,7 +119,7 @@ public class DefaultDirectorTest {
         mockServer.expect(requestTo(url("/releases/cf-redis")))//
                 .andRespond(withSuccess(response("release.json"), MediaType.TEXT_HTML));
         // When
-        ReleaseDetails release = director.getRelease("cf-redis");
+        GetReleaseResponse release = director.getRelease("cf-redis");
 
         // Then
         assertThat(release.getName(), is("cf-redis"));

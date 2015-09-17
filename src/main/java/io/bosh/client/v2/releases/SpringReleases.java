@@ -15,7 +15,8 @@
  */
 package io.bosh.client.v2.releases;
 
-import io.bosh.client.v2.AbstractSpringOperations;
+import io.bosh.client.domain.Release;
+import io.bosh.client.v2.internal.AbstractSpringOperations;
 
 import java.net.URI;
 import java.util.Arrays;
@@ -42,8 +43,8 @@ public class SpringReleases extends AbstractSpringOperations implements Releases
     }
 
     @Override
-    public Observable<ReleaseDetails> get(GetReleaseRequest request) {
-        return get(ReleaseDetails.class,
+    public Observable<GetReleaseResponse> get(GetReleaseRequest request) {
+        return get(GetReleaseResponse.class,
                 builder -> builder.pathSegment("releases", request.getName()));
         // release.setName(name);
         // return release;
