@@ -1,0 +1,57 @@
+
+
+Categories:
+* Stemcells
+** delete
+** list
+** upload
+
+* Releases
+** delete
+** list
+** upload
+
+* Deployments
+** delete
+** list deployments
+** deploy
+** cloudcheck
+** download manifest
+
+* tasks
+** cancel
+** show task
+** list running tasks
+** list recent tasks
+
+* jobs
+** logs for job
+** recreate job
+** restart job
+** start job
+** stop job
+
+* vms
+** enable/disable ressurection
+** list vms
+
+* errands
+** errands list
+** run errand
+
+* snapshots
+** delete snapshot
+** delete snapshots
+** list snapshots
+** task snapshot
+
+* users
+** create user
+** delete user
+
+* status
+
+
+list locks
+export compiled_packages
+import compiled_packages

@@ -22,12 +22,12 @@ import io.bosh.client.domain.DirectorInfo;
 import io.bosh.client.domain.ErrandSummary;
 import io.bosh.client.domain.LogType;
 import io.bosh.client.domain.Problem;
-import io.bosh.client.domain.Release;
-import io.bosh.client.domain.ReleaseDetails;
 import io.bosh.client.domain.StemcellDetails;
 import io.bosh.client.domain.Task;
 import io.bosh.client.domain.Vm;
 import io.bosh.client.domain.VmDetails;
+import io.bosh.client.v2.releases.Release;
+import io.bosh.client.v2.releases.ReleaseDetails;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -66,8 +66,10 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpResponse;
@@ -75,6 +77,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -430,5 +433,75 @@ public class DirectorClient implements DirectorOperations {
          System.out.println(director.getDeployment("platform-backup").getRawManifest());
         // System.out.println(director.getDeployment("platform-backup").getManifest().get("name"));
 
+    }
+
+    @Override
+    public void stopJob(String deploymentName, String jobName, boolean powerOffVm) {
+        // TODO Auto-generated method stub
+        DeploymentDetails deployment = getDeployment(deploymentName);
+        // assert deployment exists, assert job exists?
+        
+        String manifest = deployment.getRawManifest();
+        
+//        url = "/deployments/#{deployment_name}/jobs/#{job_name}"
+//                url += "/#{index}" if index
+//                url += "?state=#{new_state}"
+//                url += "&skip_drain=true" if skip_drain
+        LOG.debug("Stopping job '{}' in deployment '{}'", jobName, deploymentName);
+        UriComponentsBuilder uriBuilder = 
+       UriComponentsBuilder.fromUri(this.root)
+                .pathSegment("deployments", deploymentName, "jobs", jobName);
+//        if(index != null){
+//            uriBuilder.pathSegment(index);
+//        }
+        if(powerOffVm){
+            uriBuilder.queryParam("state", "stopped");
+        }else{
+            uriBuilder.queryParam("state", "detached");
+        }
+//        if(skipDrain){
+//            uriBuilder.queryParam("skip_drain", "true");
+//        }
+        URI uri = uriBuilder.build().toUri();
+        MultiValueMap<String, String> headers = new  HttpHeaders();
+        headers.put("content-type",Arrays.asList("text-yaml"));
+        RequestEntity<String> requestEntity = new RequestEntity<String>(manifest, headers, HttpMethod.PUT, uri);
+        ResponseEntity<Void> response = restTemplate.exchange( requestEntity, Void.class);
+        String taskId = trackTask(response);
+        
+        // set content-type to text/yaml
+        
+        //https://github.com/cloudfoundry/bosh/blob/master/bosh_cli/lib/cli/client/director.rb#L299
+//        https://github.com/cloudfoundry/bosh/blob/master/bosh_cli/lib/cli/commands/job_management.rb
+        
+//        OPERATION_DESCRIPTIONS = {
+//                start: 'start %s',
+//                stop: 'stop %s',
+//                detach: 'stop %s and power off its VM(s)',
+//                restart: 'restart %s',
+//                recreate: 'recreate %s'
+//            }
+//
+//            NEW_STATES = {
+//                start: 'started',
+//                stop: 'stopped',
+//                detach: 'detached',
+//                restart: 'restart',
+//                recreate: 'recreate'
+//            }
+//
+//            COMPLETION_DESCRIPTIONS = {
+//                start: '%s has been started',
+//                stop: '%s has been stopped, VM(s) still running',
+//                detach: '%s has been detached, VM(s) powered off',
+//                restart: '%s has been restarted',
+//                recreate: '%s has been recreated'
+//            }
+    }
+
+    @Override
+    public void stopJob(String deploymentName, String jobName, int index, boolean powerOffVm) {
+        // TODO Auto-generated method stub
+        
     }
 }

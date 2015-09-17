@@ -21,12 +21,12 @@ import io.bosh.client.domain.DirectorInfo;
 import io.bosh.client.domain.ErrandSummary;
 import io.bosh.client.domain.LogType;
 import io.bosh.client.domain.Problem;
-import io.bosh.client.domain.Release;
-import io.bosh.client.domain.ReleaseDetails;
 import io.bosh.client.domain.StemcellDetails;
 import io.bosh.client.domain.Task;
 import io.bosh.client.domain.Vm;
 import io.bosh.client.domain.VmDetails;
+import io.bosh.client.v2.releases.Release;
+import io.bosh.client.v2.releases.ReleaseDetails;
 
 import java.io.InputStream;
 import java.util.List;
@@ -76,4 +76,9 @@ public interface DirectorOperations {
     
     InputStream fetchLogs(String deploymentName, String jobName, int jobIndex, LogType logType, String... filters);
 
+    
+    // TODO add skipDrain option
+    void stopJob(String deploymentName, String jobName, boolean powerOffVm);
+    
+    void stopJob(String deploymentName, String jobName, int index, boolean powerOffVm);
 }

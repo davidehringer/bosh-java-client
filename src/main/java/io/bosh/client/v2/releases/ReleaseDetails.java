@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.bosh.client.domain;
+package io.bosh.client.v2.releases;
+
+import io.bosh.client.domain.Job;
+import io.bosh.client.domain.Package;
 
 import java.util.ArrayList;
 import java.util.List;
