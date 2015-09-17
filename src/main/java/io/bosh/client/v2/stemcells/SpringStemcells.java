@@ -15,7 +15,6 @@
  */
 package io.bosh.client.v2.stemcells;
 
-import io.bosh.client.domain.StemcellDetails;
 import io.bosh.client.v2.internal.AbstractSpringOperations;
 
 import java.net.URI;

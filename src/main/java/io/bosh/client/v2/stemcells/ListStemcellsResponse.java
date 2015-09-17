@@ -15,8 +15,6 @@
  */
 package io.bosh.client.v2.stemcells;
 
-import io.bosh.client.domain.StemcellDetails;
-
 import java.util.ArrayList;
 import java.util.List;
 

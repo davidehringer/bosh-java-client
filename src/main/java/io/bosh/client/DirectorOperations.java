@@ -22,11 +22,11 @@ import io.bosh.client.domain.ErrandSummary;
 import io.bosh.client.domain.LogType;
 import io.bosh.client.domain.Problem;
 import io.bosh.client.domain.Release;
-import io.bosh.client.domain.StemcellDetails;
 import io.bosh.client.domain.Task;
 import io.bosh.client.domain.Vm;
 import io.bosh.client.domain.VmDetails;
 import io.bosh.client.v2.releases.GetReleaseResponse;
+import io.bosh.client.v2.stemcells.StemcellDetails;
 
 import java.io.InputStream;
 import java.util.List;
