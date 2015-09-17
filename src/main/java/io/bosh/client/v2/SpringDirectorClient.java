@@ -19,6 +19,8 @@ import java.net.URI;
 
 import org.springframework.web.client.RestTemplate;
 
+import io.bosh.client.v2.info.Info;
+import io.bosh.client.v2.info.SpringInfo;
 import io.bosh.client.v2.releases.Releases;
 import io.bosh.client.v2.releases.SpringReleases;
 import io.bosh.client.v2.stemcells.Stemcells;
@@ -33,11 +35,13 @@ public class SpringDirectorClient implements DirectorClient {
     
     private final Releases releases;
     private final Stemcells stemcells;
+    private final Info info;
 
     SpringDirectorClient(URI root, RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         this.releases = new SpringReleases(restTemplate, root);
         this.stemcells = new SpringStemcells(restTemplate, root);
+        this.info = new SpringInfo(restTemplate, root);
     }
     
     public RestTemplate restTemplate(){
@@ -52,6 +56,11 @@ public class SpringDirectorClient implements DirectorClient {
     @Override
     public Releases releases() {
         return releases;
+    }
+
+    @Override
+    public Info info() {
+        return info;
     }
 
 }

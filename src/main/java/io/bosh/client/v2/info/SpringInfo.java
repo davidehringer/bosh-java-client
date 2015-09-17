@@ -13,20 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.bosh.client.v2;
+package io.bosh.client.v2.info;
 
-import io.bosh.client.v2.info.Info;
-import io.bosh.client.v2.releases.Releases;
-import io.bosh.client.v2.stemcells.Stemcells;
+import io.bosh.client.v2.internal.AbstractSpringOperations;
+
+import java.net.URI;
+import java.util.Arrays;
+
+import org.springframework.web.client.RestOperations;
+
+import rx.Observable;
 
 /**
  * @author David Ehringer
  */
-public interface DirectorClient {
+public class SpringInfo extends AbstractSpringOperations implements Info {
 
-    Stemcells stemcells();
-    
-    Releases releases();
-    
-    Info info();
+    public SpringInfo(RestOperations restOperations, URI root) {
+        super(restOperations, root);
+    }
+
+    @Override
+    public Observable<DirectorInfo> info() {
+        return get(DirectorInfo.class, 
+                builder -> builder.pathSegment("info"));
+    }
+
 }

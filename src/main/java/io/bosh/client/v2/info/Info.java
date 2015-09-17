@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.bosh.client.v2;
+package io.bosh.client.v2.info;
 
-import io.bosh.client.v2.info.Info;
-import io.bosh.client.v2.releases.Releases;
-import io.bosh.client.v2.stemcells.Stemcells;
+import rx.Observable;
 
 /**
  * @author David Ehringer
  */
-public interface DirectorClient {
+public interface Info {
 
-    Stemcells stemcells();
-    
-    Releases releases();
-    
-    Info info();
+    Observable<DirectorInfo> info();
 }
