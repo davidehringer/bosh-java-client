@@ -79,28 +79,6 @@ public abstract class AbstractSpringOperations {
         });
     }
 
-    /**
-     * A specialize GET method that can convert the BOSH Director responses that are a list of JSON responses (rather than a JSON array).
-     * 
-     * @param responseType the response type of the method
-     * @param builderCallback a callback for configuring the URI
-     * @param apiType the type that is returned from the API calls
-     * @param mapper a function to convert the apiType to the responseType
-     * @return
-     */
-    protected final <T,R> Observable<T> getArray(Class<T> responseType,
-            Consumer<UriComponentsBuilder> builderCallback, Class<R> apiType, Function <R, T> mapper) {
-        return exchange(() -> {
-            UriComponentsBuilder builder = UriComponentsBuilder.fromUri(this.root);
-            builderCallback.accept(builder);
-            URI uri = builder.build().toUri();
-
-            this.logger.debug("GET {}", uri);
-            R response = this.restOperations.getForObject(uri, apiType);
-            return mapper.apply(response);
-        });
-    }
-
     protected final <T> Observable<T> exchange(Supplier<T> exchange) {
         return Observable.create(subscriber -> {
 

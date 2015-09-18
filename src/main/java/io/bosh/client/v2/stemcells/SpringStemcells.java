@@ -35,10 +35,9 @@ public class SpringStemcells extends AbstractSpringOperations implements Stemcel
 
     @Override
     public Observable<ListStemcellsResponse> list() {
-        return getArray(ListStemcellsResponse.class, 
-                builder -> builder.pathSegment("stemcells"),
-                StemcellDetails[].class,
-                results -> new ListStemcellsResponse().withStemcells(Arrays.asList(results)));
+        return get(StemcellDetails[].class, 
+                builder -> builder.pathSegment("stemcells"))
+               .map(results -> new ListStemcellsResponse().withStemcells(Arrays.asList(results)));
     }
 
 }

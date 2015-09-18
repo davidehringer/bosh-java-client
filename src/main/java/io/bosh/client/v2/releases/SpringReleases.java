@@ -36,10 +36,9 @@ public class SpringReleases extends AbstractSpringOperations implements Releases
 
     @Override
     public Observable<ListReleasesResponse> list() {
-        return getArray(ListReleasesResponse.class, 
-                builder -> builder.pathSegment("releases"),
-                Release[].class,
-                results -> new ListReleasesResponse().withReleases(Arrays.asList(results)));
+        return get(Release[].class, 
+                builder -> builder.pathSegment("releases"))
+              .map(results -> new ListReleasesResponse().withReleases(Arrays.asList(results)));
     }
 
     @Override

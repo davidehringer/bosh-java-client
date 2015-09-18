@@ -41,10 +41,9 @@ public class SpringDeployments extends AbstractSpringOperations implements Deplo
 
     @Override
     public Observable<ListDeploymentsResponse> list() {
-        return getArray(ListDeploymentsResponse.class, 
-                builder -> builder.pathSegment("deployments"),
-                Deployment[].class,
-                results -> new ListDeploymentsResponse().withDeployments(Arrays.asList(results)));
+        return get(Deployment[].class, 
+                builder -> builder.pathSegment("deployments"))
+               .map(results -> new ListDeploymentsResponse().withDeployments(Arrays.asList(results)));
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
