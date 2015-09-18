@@ -21,6 +21,8 @@ import org.springframework.web.client.RestTemplate;
 
 import io.bosh.client.v2.deployments.Deployments;
 import io.bosh.client.v2.deployments.SpringDeployments;
+import io.bosh.client.v2.errands.Errands;
+import io.bosh.client.v2.errands.SpringErrands;
 import io.bosh.client.v2.info.Info;
 import io.bosh.client.v2.info.SpringInfo;
 import io.bosh.client.v2.releases.Releases;
@@ -42,6 +44,7 @@ public class SpringDirectorClient implements DirectorClient {
     private final Stemcells stemcells;
     private final Deployments deployments;
     private final Vms vms;
+    private final Errands errands;
 
     SpringDirectorClient(URI root, RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -50,6 +53,7 @@ public class SpringDirectorClient implements DirectorClient {
         this.stemcells = new SpringStemcells(restTemplate, root);
         this.deployments = new SpringDeployments(restTemplate, root);
         this.vms = new SpringVms(restTemplate, root);
+        this.errands = new SpringErrands(restTemplate, root);
     }
     
     public RestTemplate restTemplate(){
@@ -79,6 +83,11 @@ public class SpringDirectorClient implements DirectorClient {
     @Override
     public Vms vms() {
         return vms;
+    }
+
+    @Override
+    public Errands errands() {
+        return errands;
     }
 
 }

@@ -15,9 +15,12 @@
  */
 package io.bosh.client.v2.errands;
 
+import rx.Observable;
+
 /**
  * @author David Ehringer
  */
 public interface Errands {
 
+    Observable<ListErrandsResponse> list(ListErrandsRequest request);
 }

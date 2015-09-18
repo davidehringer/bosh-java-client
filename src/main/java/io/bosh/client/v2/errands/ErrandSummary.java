@@ -13,29 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.bosh.client.v2;
+package io.bosh.client.v2.errands;
 
-import io.bosh.client.v2.deployments.Deployments;
-import io.bosh.client.v2.errands.Errands;
-import io.bosh.client.v2.info.Info;
-import io.bosh.client.v2.releases.Releases;
-import io.bosh.client.v2.stemcells.Stemcells;
-import io.bosh.client.v2.vms.Vms;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * @author David Ehringer
  */
-public interface DirectorClient {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class ErrandSummary {
 
-    Info info();
-    
-    Stemcells stemcells();
-    
-    Releases releases();
-    
-    Deployments deployments();
-    
-    Vms vms();
-    
-    Errands errands();
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return "Errand [name=" + name + "]";
+    }
+
 }

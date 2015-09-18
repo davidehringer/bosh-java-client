@@ -13,25 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.bosh.client.domain;
+package io.bosh.client.v2.errands;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author David Ehringer
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class ErrandSummary {
+public class ListErrandsResponse {
 
-    private String name;
-
-    public String getName() {
-        return name;
+    private final List<ErrandSummary> errands = new ArrayList<ErrandSummary>();
+    
+    public List<ErrandSummary> getErrands() {
+        return errands;
     }
 
-    @Override
-    public String toString() {
-        return "Errand [name=" + name + "]";
+    public ListErrandsResponse withErrands(List<ErrandSummary> errands) {
+        this.errands.addAll(errands);
+        return this;
     }
-
 }
