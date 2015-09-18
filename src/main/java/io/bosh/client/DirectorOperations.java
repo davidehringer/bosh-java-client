@@ -21,12 +21,12 @@ import io.bosh.client.domain.LogType;
 import io.bosh.client.domain.Problem;
 import io.bosh.client.domain.Release;
 import io.bosh.client.domain.Task;
-import io.bosh.client.domain.Vm;
-import io.bosh.client.domain.VmDetails;
 import io.bosh.client.v2.deployments.Deployment;
 import io.bosh.client.v2.info.DirectorInfo;
 import io.bosh.client.v2.releases.GetReleaseResponse;
 import io.bosh.client.v2.stemcells.StemcellDetails;
+import io.bosh.client.v2.vms.Vm;
+import io.bosh.client.v2.vms.VmDetails;
 
 import java.io.InputStream;
 import java.util.List;
@@ -59,8 +59,10 @@ public interface DirectorOperations {
     // x
     DeploymentDetails getDeployment(String name);
 
+    // X
     List<Vm> getVms(String deploymentName);
 
+    // x
     List<VmDetails> getVmDetails(String deploymentName);
 
     List<ErrandSummary> getErrands(String deploymentName);

@@ -8,10 +8,10 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import io.bosh.client.domain.LogType;
 import io.bosh.client.domain.Release;
 import io.bosh.client.domain.Task;
-import io.bosh.client.domain.Vm;
 import io.bosh.client.v2.deployments.Deployment;
 import io.bosh.client.v2.info.DirectorInfo;
 import io.bosh.client.v2.releases.GetReleaseResponse;
+import io.bosh.client.v2.vms.Vm;
 
 import java.io.File;
 import java.io.IOException;

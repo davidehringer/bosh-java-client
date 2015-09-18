@@ -15,14 +15,23 @@
  */
 package io.bosh.client.v2.vms;
 
-import rx.Observable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
+ * 
  * @author David Ehringer
  */
-public interface Vms {
+public class ListVmsResponse {
 
-    Observable<ListVmsResponse> list(ListVmsRequest request);
-    
-    Observable<ListVmDetailsResponse> listDetails(ListVmDetailsRequest request); 
+    private final List<Vm> vms = new ArrayList<Vm>();
+
+    public List<Vm> getVms() {
+        return vms;
+    }
+
+    public ListVmsResponse withVms(List<Vm> vms) {
+        this.vms.addAll(vms);
+        return this;
+    }
 }

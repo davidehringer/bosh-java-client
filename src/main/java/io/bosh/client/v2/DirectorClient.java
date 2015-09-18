@@ -19,6 +19,7 @@ import io.bosh.client.v2.deployments.Deployments;
 import io.bosh.client.v2.info.Info;
 import io.bosh.client.v2.releases.Releases;
 import io.bosh.client.v2.stemcells.Stemcells;
+import io.bosh.client.v2.vms.Vms;
 
 /**
  * @author David Ehringer
@@ -32,4 +33,6 @@ public interface DirectorClient {
     Releases releases();
     
     Deployments deployments();
+    
+    Vms vms();
 }

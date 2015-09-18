@@ -15,14 +15,20 @@
  */
 package io.bosh.client.v2.vms;
 
-import rx.Observable;
 
 /**
  * @author David Ehringer
  */
-public interface Vms {
-
-    Observable<ListVmsResponse> list(ListVmsRequest request);
+public class ListVmDetailsRequest {
     
-    Observable<ListVmDetailsResponse> listDetails(ListVmDetailsRequest request); 
+    private String deploymentName;
+
+    public String getDeploymentName() {
+        return deploymentName;
+    }
+
+    public ListVmDetailsRequest withDeploymentName(String deploymentName) {
+        this.deploymentName = deploymentName;
+        return this;
+    }
 }

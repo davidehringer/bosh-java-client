@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.bosh.client.domain;
+package io.bosh.client.v2.vms;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +41,8 @@ public class VmDetails {
     @JsonProperty("resource_pool")
     private String resourcePool;
     private VmVitals vitals;
+    @JsonProperty("resurrection_paused")
+    private boolean resurrectionPaused;
 
     public String getVmCid() {
         return vmCid;
@@ -76,6 +78,10 @@ public class VmDetails {
 
     public VmVitals getVitals() {
         return vitals;
+    }
+    
+    public boolean isResurrectionPaused() {
+        return resurrectionPaused;
     }
 
     @Override

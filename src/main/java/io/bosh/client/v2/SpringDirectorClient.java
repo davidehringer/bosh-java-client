@@ -27,6 +27,8 @@ import io.bosh.client.v2.releases.Releases;
 import io.bosh.client.v2.releases.SpringReleases;
 import io.bosh.client.v2.stemcells.Stemcells;
 import io.bosh.client.v2.stemcells.SpringStemcells;
+import io.bosh.client.v2.vms.SpringVms;
+import io.bosh.client.v2.vms.Vms;
 
 /**
  * @author David Ehringer
@@ -39,6 +41,7 @@ public class SpringDirectorClient implements DirectorClient {
     private final Releases releases;
     private final Stemcells stemcells;
     private final Deployments deployments;
+    private final Vms vms;
 
     SpringDirectorClient(URI root, RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -46,6 +49,7 @@ public class SpringDirectorClient implements DirectorClient {
         this.releases = new SpringReleases(restTemplate, root);
         this.stemcells = new SpringStemcells(restTemplate, root);
         this.deployments = new SpringDeployments(restTemplate, root);
+        this.vms = new SpringVms(restTemplate, root);
     }
     
     public RestTemplate restTemplate(){
@@ -70,6 +74,11 @@ public class SpringDirectorClient implements DirectorClient {
     @Override
     public Deployments deployments() {
         return deployments;
+    }
+
+    @Override
+    public Vms vms() {
+        return vms;
     }
 
 }

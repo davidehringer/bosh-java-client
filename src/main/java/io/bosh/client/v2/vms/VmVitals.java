@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.bosh.client.domain;
+package io.bosh.client.v2.vms;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +95,10 @@ public class VmVitals {
             return ephemeral;
         }
 
+        /**
+         * May be null if VM does not have persistent disk
+         * @return
+         */
         public DiskUsage getPersistent() {
             return persistent;
         }
