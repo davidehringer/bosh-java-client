@@ -19,6 +19,8 @@ import java.net.URI;
 
 import org.springframework.web.client.RestTemplate;
 
+import io.bosh.client.v2.deployments.Deployments;
+import io.bosh.client.v2.deployments.SpringDeployments;
 import io.bosh.client.v2.info.Info;
 import io.bosh.client.v2.info.SpringInfo;
 import io.bosh.client.v2.releases.Releases;
@@ -32,16 +34,18 @@ import io.bosh.client.v2.stemcells.SpringStemcells;
 public class SpringDirectorClient implements DirectorClient {
     
     private final RestTemplate restTemplate;
-    
+
+    private final Info info;
     private final Releases releases;
     private final Stemcells stemcells;
-    private final Info info;
+    private final Deployments deployments;
 
     SpringDirectorClient(URI root, RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
+        this.info = new SpringInfo(restTemplate, root);
         this.releases = new SpringReleases(restTemplate, root);
         this.stemcells = new SpringStemcells(restTemplate, root);
-        this.info = new SpringInfo(restTemplate, root);
+        this.deployments = new SpringDeployments(restTemplate, root);
     }
     
     public RestTemplate restTemplate(){
@@ -61,6 +65,11 @@ public class SpringDirectorClient implements DirectorClient {
     @Override
     public Info info() {
         return info;
+    }
+
+    @Override
+    public Deployments deployments() {
+        return deployments;
     }
 
 }

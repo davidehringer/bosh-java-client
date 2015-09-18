@@ -15,14 +15,36 @@
  */
 package io.bosh.client.v2.deployments;
 
-import rx.Observable;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * @author David Ehringer
  */
-public interface Deployments {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Deployment {
 
-    Observable<ListDeploymentsResponse> list();
-    
-    Observable<GetDeploymentResponse> get(GetDeploymentRequest request);
+    private String name;
+    private List<ReleaseSummary> releases = new ArrayList<ReleaseSummary>();
+    private List<StemcellSummary> stemcells = new ArrayList<StemcellSummary>();
+
+    public String getName() {
+        return name;
+    }
+
+    public List<ReleaseSummary> getReleases() {
+        return releases;
+    }
+
+    public List<StemcellSummary> getStemcells() {
+        return stemcells;
+    }
+
+    @Override
+    public String toString() {
+        return "Deployment [name=" + name + "]";
+    }
+
 }

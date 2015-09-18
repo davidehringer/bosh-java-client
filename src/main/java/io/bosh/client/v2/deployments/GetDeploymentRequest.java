@@ -13,21 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.bosh.client.domain;
-
-import io.bosh.client.v2.deployments.Deployment;
-
-import java.util.List;
+package io.bosh.client.v2.deployments;
 
 /**
- * @author David Ehringer (n0119737)
+ * @author David Ehringer
  */
-public class Deployments {
+public class GetDeploymentRequest {
 
-    private List<Deployment> deployments;
+    private String name;
 
-    public List<Deployment> getDeployments() {
-        return deployments;
+    public String getName() {
+        return name;
     }
-    
+
+    public GetDeploymentRequest withName(String name) {
+        this.name = name;
+        return this;
+    }
+
 }

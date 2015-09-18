@@ -6,9 +6,6 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import io.bosh.client.AbstractDirectorTest;
 import io.bosh.client.v2.info.Info;
-import io.bosh.client.v2.stemcells.StemcellDetails;
-
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +24,7 @@ public class InfoTest extends AbstractDirectorTest{
     }
 
     @Test
-    public void releases() {
+    public void info() {
         // Given
         mockServer.expect(requestTo(url("/info")))//
                 .andRespond(withSuccess(payload("info/info-bosh-lite.json"), MediaType.TEXT_HTML));

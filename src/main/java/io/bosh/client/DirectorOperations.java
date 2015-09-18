@@ -15,7 +15,6 @@
  */
 package io.bosh.client;
 
-import io.bosh.client.domain.Deployment;
 import io.bosh.client.domain.DeploymentDetails;
 import io.bosh.client.domain.ErrandSummary;
 import io.bosh.client.domain.LogType;
@@ -24,6 +23,7 @@ import io.bosh.client.domain.Release;
 import io.bosh.client.domain.Task;
 import io.bosh.client.domain.Vm;
 import io.bosh.client.domain.VmDetails;
+import io.bosh.client.v2.deployments.Deployment;
 import io.bosh.client.v2.info.DirectorInfo;
 import io.bosh.client.v2.releases.GetReleaseResponse;
 import io.bosh.client.v2.stemcells.StemcellDetails;
@@ -53,8 +53,10 @@ public interface DirectorOperations {
     // x
     List<StemcellDetails> getStemcells();
 
+    // X
     List<Deployment> getDeployments();
 
+    // x
     DeploymentDetails getDeployment(String name);
 
     List<Vm> getVms(String deploymentName);

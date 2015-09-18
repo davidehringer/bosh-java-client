@@ -26,7 +26,7 @@ public class ReleasesTest extends AbstractDirectorTest{
     }
 
     @Test
-    public void releases() {
+    public void list() {
         // Given
         mockServer.expect(requestTo(url("/releases")))//
                 .andRespond(withSuccess(payload("releases/releases.json"), MediaType.TEXT_HTML));
@@ -46,7 +46,7 @@ public class ReleasesTest extends AbstractDirectorTest{
     }
 
     @Test
-    public void release() {
+    public void get() {
         // Given
         mockServer.expect(requestTo(url("/releases/cf-redis")))//
                 .andRespond(withSuccess(payload("releases/release.json"), MediaType.TEXT_HTML));

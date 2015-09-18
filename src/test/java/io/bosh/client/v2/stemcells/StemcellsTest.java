@@ -25,7 +25,7 @@ public class StemcellsTest extends AbstractDirectorTest{
     }
 
     @Test
-    public void releases() {
+    public void list() {
         // Given
         mockServer.expect(requestTo(url("/stemcells")))//
                 .andRespond(withSuccess(payload("stemcells/stemcells.json"), MediaType.TEXT_HTML));

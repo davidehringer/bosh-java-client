@@ -13,30 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.bosh.client.domain;
+package io.bosh.client.v2.deployments;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author David Ehringer
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class ReleaseSummary {
+public class ListDeploymentsResponse {
 
-    private String name;
-    private String version;
-
-    public String getName() {
-        return name;
+    private final List<Deployment> deployments = new ArrayList<Deployment>();
+    
+    public List<Deployment> getDeployments() {
+        return deployments;
     }
 
-    public String getVersion() {
-        return version;
+    public ListDeploymentsResponse withDeployments(List<Deployment> deployments) {
+        this.deployments.addAll(deployments);
+        return this;
     }
-
-    @Override
-    public String toString() {
-        return "Release [name=" + name + ", version=" + version + "]";
-    }
-
 }
