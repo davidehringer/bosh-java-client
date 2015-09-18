@@ -20,6 +20,7 @@ import io.bosh.client.v2.errands.Errands;
 import io.bosh.client.v2.info.Info;
 import io.bosh.client.v2.releases.Releases;
 import io.bosh.client.v2.stemcells.Stemcells;
+import io.bosh.client.v2.tasks.Tasks;
 import io.bosh.client.v2.vms.Vms;
 
 /**
@@ -38,4 +39,6 @@ public interface DirectorClient {
     Vms vms();
     
     Errands errands();
+    
+    Tasks tasks();
 }

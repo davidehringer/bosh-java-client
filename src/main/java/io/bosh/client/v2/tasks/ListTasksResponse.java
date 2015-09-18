@@ -15,18 +15,22 @@
  */
 package io.bosh.client.v2.tasks;
 
-import rx.Observable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author David Ehringer
  */
-public interface Tasks {
+public class ListTasksResponse {
 
-    Observable<ListTasksResponse> listRunning();
+    private final List<Task> tasks = new ArrayList<Task>();
     
-    Observable<ListTasksResponse> listRecent();
+    public List<Task> getTasks() {
+        return tasks;
+    }
 
-    Observable<ListTasksResponse> listRecent(int count);
-    
-    Observable<Task> get(String id);
+    public ListTasksResponse withErrands(List<Task> tasks) {
+        this.tasks.addAll(tasks);
+        return this;
+    }
 }
