@@ -4,13 +4,17 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import io.bosh.client.AbstractDirectorTest;
 
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 
 /**
@@ -61,5 +65,52 @@ public class DeploymentsTest extends AbstractDirectorTest{
             assertThat(((List)response.getManifest().get("releases")).size(), is(1));
         });
     }
+    
+    @Test
+    public void cloudcheckClean() {
+        // Given
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Location", "https://10.174.52.151/tasks/3307");
+        mockServer.expect(requestTo(url("/deployments/cf-redis-61423dfddec885b6e28d/scans")))//
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withSuccess().headers(headers));
 
+        mockServer.expect(requestTo(url("/tasks/3307")))//
+                .andRespond(withSuccess(payload("tasks/in-progress-task.json"), MediaType.TEXT_HTML));
+        mockServer.expect(requestTo(url("/tasks/3307")))
+                .andRespond(withSuccess(payload("deployments/cloudcheck-task-complete.json"), MediaType.TEXT_HTML));
+        mockServer.expect(requestTo(url("/deployments/cf-redis-61423dfddec885b6e28d/problems")))
+                .andRespond(withSuccess(payload("deployments/cloudcheck-results-clean.json"), MediaType.TEXT_HTML));
+        
+        // When
+        deployments.cloudcheck("cf-redis-61423dfddec885b6e28d").subscribe(results -> {
+            // Then
+            assertThat(results.size(), is(0));
+        });
+    }
+    
+    @Test
+    @Ignore("Need to get an example response")
+    public void cloudcheckProblems() {
+        // Given
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Location", "https://10.174.52.151/tasks/3307");
+        mockServer.expect(requestTo(url("/deployments/cf-redis-61423dfddec885b6e28d/scans")))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withSuccess().headers(headers));
+
+        mockServer.expect(requestTo(url("/tasks/3307")))//
+                .andRespond(withSuccess(payload("tasks/in-progress-task.json"), MediaType.TEXT_HTML));
+        mockServer.expect(requestTo(url("/tasks/3307")))
+                .andRespond(withSuccess(payload("deployments/cloudcheck-task-complete.json"), MediaType.TEXT_HTML));
+        mockServer.expect(requestTo(url("/deployments/cf-redis-61423dfddec885b6e28d/problems")))
+                .andRespond(withSuccess(payload("deployments/cloudcheck-results-problems.json"), MediaType.TEXT_HTML));
+        
+        // When
+        deployments.cloudcheck("cf-redis-61423dfddec885b6e28d").subscribe(results -> {
+            // Then
+            assertThat(results.size(), is(1));
+        });
+    }
+    
 }

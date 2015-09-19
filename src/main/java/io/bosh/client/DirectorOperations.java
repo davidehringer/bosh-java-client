@@ -17,9 +17,9 @@ package io.bosh.client;
 
 import io.bosh.client.domain.DeploymentDetails;
 import io.bosh.client.domain.LogType;
-import io.bosh.client.domain.Problem;
 import io.bosh.client.domain.Release;
 import io.bosh.client.v2.deployments.Deployment;
+import io.bosh.client.v2.deployments.Problem;
 import io.bosh.client.v2.errands.ErrandSummary;
 import io.bosh.client.v2.info.DirectorInfo;
 import io.bosh.client.v2.releases.GetReleaseResponse;
@@ -80,8 +80,10 @@ public interface DirectorOperations {
     // X
     Task getTask(String id);
 
+    // x
     List<Problem> performCloudScan(String deploymentName);
     
+    // X
     /**
      * Typically preceeded by {@link #performCloudScan(String)}
      */

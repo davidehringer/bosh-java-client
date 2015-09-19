@@ -1,4 +1,4 @@
-package io.bosh.client.domain;
+package io.bosh.client.v2.deployments;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

@@ -15,6 +15,8 @@
  */
 package io.bosh.client.v2.deployments;
 
+import java.util.List;
+
 import rx.Observable;
 
 /**
@@ -25,4 +27,6 @@ public interface Deployments {
     Observable<ListDeploymentsResponse> list();
     
     Observable<GetDeploymentResponse> get(GetDeploymentRequest request);
+    
+    Observable<List<Problem>> cloudcheck(String deploymentName);
 }

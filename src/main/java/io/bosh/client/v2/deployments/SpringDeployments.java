@@ -21,6 +21,7 @@ import io.bosh.client.v2.internal.AbstractSpringOperations;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.client.RestTemplate;
@@ -64,6 +65,17 @@ public class SpringDeployments extends AbstractSpringOperations implements Deplo
                    response.setManifestMap(manifestMap);
                    return response;
                });
+    }
+
+    @Override
+    public Observable<List<Problem>> cloudcheck(String deploymentName) {
+        return postForEntity(Void.class, null, builder -> builder.pathSegment("deployments", deploymentName, "scans"))
+                .flatMap(response -> {
+                    // TODO can we detect an error here?
+                    trackTask(response);
+                    return get(Problem[].class, builder -> builder.pathSegment("deployments", deploymentName, "problems"))
+                    .map(problems -> Arrays.asList(problems));
+                });
     }
 
 }

@@ -77,6 +77,30 @@ public abstract class AbstractSpringOperations {
             return this.restOperations.getForEntity(uri, responseType);
         });
     }
+    
+    protected final <T> Observable<T> post(Class<T> responseType, Object request,
+            Consumer<UriComponentsBuilder> builderCallback) {
+        return exchange(() -> {
+            UriComponentsBuilder builder = UriComponentsBuilder.fromUri(this.root);
+            builderCallback.accept(builder);
+            URI uri = builder.build().toUri();
+
+            this.logger.debug("GET {}", uri);
+            return this.restOperations.postForObject(uri, request, responseType);
+        });
+    }
+    
+    protected final <T> Observable<ResponseEntity<T>> postForEntity(Class<T> responseType, Object request,
+            Consumer<UriComponentsBuilder> builderCallback) {
+        return exchange(() -> {
+            UriComponentsBuilder builder = UriComponentsBuilder.fromUri(this.root);
+            builderCallback.accept(builder);
+            URI uri = builder.build().toUri();
+
+            this.logger.debug("GET {}", uri);
+            return this.restOperations.postForEntity(uri, request, responseType);
+        });
+    }
 
     protected final <T> Observable<T> exchange(Supplier<T> exchange) {
         return Observable.create(subscriber -> {
