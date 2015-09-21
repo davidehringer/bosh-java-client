@@ -13,32 +13,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.bosh.client.domain;
+package io.bosh.client.v2.releases;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * @author David Ehringer
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Release {
+public class Job {
 
     private String name;
-    @JsonProperty("release_versions")
-    private List<ReleaseVersion> releaseVersions = new ArrayList<ReleaseVersion>();
+    private String sha1;
+    private String version;
+    private List<String> packages = new ArrayList<String>();
 
     public String getName() {
         return name;
     }
 
-    public List<ReleaseVersion> getVersions() {
-        return releaseVersions;
+    public String getSha1() {
+        return sha1;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public List<String> getPackages() {
+        return packages;
     }
 
     @Override
     public String toString() {
-        return "ReleaseDetails [name=" + name + ", release_versions=" + releaseVersions + "]";
+        return "Job [name=" + name + ", sha1=" + sha1 + ", version=" + version + ", packages="
+                + packages + "]";
     }
+
 
 }

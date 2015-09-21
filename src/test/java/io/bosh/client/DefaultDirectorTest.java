@@ -5,11 +5,11 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
-import io.bosh.client.domain.Release;
 import io.bosh.client.v2.deployments.Deployment;
 import io.bosh.client.v2.info.DirectorInfo;
 import io.bosh.client.v2.jobs.LogType;
 import io.bosh.client.v2.releases.GetReleaseResponse;
+import io.bosh.client.v2.releases.Release;
 import io.bosh.client.v2.tasks.Task;
 import io.bosh.client.v2.vms.Vm;
 

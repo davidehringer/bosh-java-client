@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.bosh.client.domain;
+package io.bosh.client.v2.releases;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +24,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @author David Ehringer
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Job {
+public class Package {
 
     private String name;
     private String sha1;
     private String version;
-    private List<String> packages = new ArrayList<String>();
+    private List<String> dependencies = new ArrayList<String>();
 
     public String getName() {
         return name;
@@ -43,15 +43,14 @@ public class Job {
         return version;
     }
 
-    public List<String> getPackages() {
-        return packages;
+    public List<String> getDependencies() {
+        return dependencies;
     }
 
     @Override
     public String toString() {
-        return "Job [name=" + name + ", sha1=" + sha1 + ", version=" + version + ", packages="
-                + packages + "]";
+        return "Package [name=" + name + ", sha1=" + sha1 + ", version=" + version
+                + ", dependencies=" + dependencies + "]";
     }
-
 
 }

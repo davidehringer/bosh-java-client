@@ -15,8 +15,6 @@
  */
 package io.bosh.client.v2.releases;
 
-import io.bosh.client.domain.Release;
-
 import java.util.ArrayList;
 import java.util.List;
 

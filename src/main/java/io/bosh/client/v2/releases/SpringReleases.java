@@ -15,7 +15,6 @@
  */
 package io.bosh.client.v2.releases;
 
-import io.bosh.client.domain.Release;
 import io.bosh.client.v2.internal.AbstractSpringOperations;
 
 import java.net.URI;
