@@ -18,9 +18,6 @@ package io.bosh.client.v2.internal;
 import io.bosh.client.v2.DirectorException;
 
 import java.net.URI;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
@@ -41,10 +38,6 @@ import rx.Observable;
 public abstract class AbstractSpringOperations {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    private static final int TASK_TRACKING_POLL_INTERVAL = 1000;
-    private static final List<String> COMPLETED_STATES = Arrays
-            .asList("done", "error", "cancelled");
 
     protected final RestOperations restOperations;
     protected final URI root;
@@ -122,39 +115,5 @@ public abstract class AbstractSpringOperations {
             return matcher.group(1);
         }
         throw new IllegalArgumentException("Response does not have a redirect header for a task");
-    }
-
-    // TODO delete this after removing all uses of it
-    @SuppressWarnings("unchecked")
-    protected String trackTask(ResponseEntity<?> response) {
-        // TODO assert redirect
-        // https://10.174.52.151/tasks/3307
-        Pattern pattern = Pattern.compile(".*/tasks/(.*)$");
-        Matcher matcher = pattern.matcher(response.getHeaders().getLocation().toString());
-        if (matcher.matches()) {
-            String taskId = matcher.group(1);
-            logger.debug("Tracking task {}", taskId);
-            URI taskUri = UriComponentsBuilder.fromUri(this.root).pathSegment("tasks", taskId)
-                    .build().toUri();
-            String state = "unknown";
-            while (inProgress(state)) {
-                // TODO put in a max polls?
-                try {
-                    Thread.sleep(TASK_TRACKING_POLL_INTERVAL);
-                } catch (InterruptedException e) {
-                }
-                Map<String, String> result = this.restOperations.getForObject(taskUri, Map.class);
-                state = result.get("state");
-                logger.debug("Task {}: state = {}", taskId, state);
-            }
-            // TODO how to handle error states?
-            return taskId;
-        }
-        // TODO how to handle error states?
-        return null;
-    }
-
-    private boolean inProgress(String state) {
-        return !COMPLETED_STATES.contains(state);
     }
 }
