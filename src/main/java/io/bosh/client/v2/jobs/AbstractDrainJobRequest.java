@@ -18,18 +18,18 @@ package io.bosh.client.v2.jobs;
 /**
  * @author David Ehringer
  */
-public enum LogType {
+public class AbstractDrainJobRequest<T extends AbstractJobRequest<T>> extends AbstractJobRequest<T>{
 
-    AGENT("agent"), JOB("job");
+    private boolean skipDrain;
 
-    private final String type;
-
-    private LogType(String type) {
-        this.type = type;
+    public boolean isSkipDrain() {
+        return skipDrain;
     }
 
-    public String getType() {
-        return type;
+    @SuppressWarnings("unchecked")
+    public T withSkipDrain(boolean skipDrain) {
+        this.skipDrain = skipDrain;
+        return (T) this;
     }
 
 }

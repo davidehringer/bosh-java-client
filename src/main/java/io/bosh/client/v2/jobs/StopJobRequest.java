@@ -18,18 +18,17 @@ package io.bosh.client.v2.jobs;
 /**
  * @author David Ehringer
  */
-public enum LogType {
+public class StopJobRequest extends AbstractDrainJobRequest<StopJobRequest>{
 
-    AGENT("agent"), JOB("job");
+    private boolean powerOffVm;
 
-    private final String type;
-
-    private LogType(String type) {
-        this.type = type;
+    public boolean isPowerOffVm() {
+        return powerOffVm;
     }
 
-    public String getType() {
-        return type;
+    public StopJobRequest withPowerOffVm(boolean powerOffVm) {
+        this.powerOffVm = powerOffVm;
+        return this;
     }
 
 }

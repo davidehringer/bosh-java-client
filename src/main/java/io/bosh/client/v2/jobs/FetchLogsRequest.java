@@ -22,40 +22,10 @@ import java.util.List;
 /**
  * @author David Ehringer
  */
-public class FetchLogsRequest {
+public class FetchLogsRequest extends AbstractJobRequest<FetchLogsRequest>{
 
-    private String deploymentName;
-    private String jobName;
-    private int jobIndex;
     private LogType logType;
     private List<String> filters = new ArrayList<String>();
-
-    public String getDeploymentName() {
-        return deploymentName;
-    }
-
-    public FetchLogsRequest withDeploymentName(String deploymentName) {
-        this.deploymentName = deploymentName;
-        return this;
-    }
-
-    public String getJobName() {
-        return jobName;
-    }
-
-    public FetchLogsRequest withJobName(String jobName) {
-        this.jobName = jobName;
-        return this;
-    }
-
-    public int getJobIndex() {
-        return jobIndex;
-    }
-
-    public FetchLogsRequest withJobIndex(int jobIndex) {
-        this.jobIndex = jobIndex;
-        return this;
-    }
 
     public LogType getLogType() {
         return logType;

@@ -15,6 +15,8 @@
  */
 package io.bosh.client.v2.jobs;
 
+import io.bosh.client.v2.tasks.Task;
+
 import java.io.InputStream;
 
 import rx.Observable;
@@ -25,4 +27,20 @@ import rx.Observable;
 public interface Jobs {
 
     Observable<InputStream> fetchLogs(FetchLogsRequest request);
+
+    /**
+     * Check {@link Task#getState()} and {@link Task#getResult()} for the
+     * outcome of this operation. This operation may timeout after a defined interval based on server-side
+     * logic in the BOSH Director.
+     * 
+     * @param request
+     * @return the BOSH {@link Task} to 
+     */
+    Observable<Task> stopJob(StopJobRequest request);
+    
+    Observable<Task> startJob(StartJobRequest request);
+    
+    Observable<Task> restartJob(RestartJobRequest request);
+    
+    Observable<Task> recreateJob(RecreateJobRequest request);
 }

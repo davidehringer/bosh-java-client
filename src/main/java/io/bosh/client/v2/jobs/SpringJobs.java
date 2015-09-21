@@ -16,7 +16,10 @@
 package io.bosh.client.v2.jobs;
 
 import io.bosh.client.v2.DirectorException;
+import io.bosh.client.v2.deployments.Deployments;
+import io.bosh.client.v2.deployments.GetDeploymentRequest;
 import io.bosh.client.v2.internal.AbstractSpringOperations;
+import io.bosh.client.v2.tasks.Task;
 import io.bosh.client.v2.tasks.Tasks;
 
 import java.io.File;
@@ -28,10 +31,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.zip.GZIPInputStream;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseExtractor;
@@ -46,10 +51,12 @@ import rx.Observable;
 public class SpringJobs extends AbstractSpringOperations implements Jobs{
 
     private final Tasks tasks;
+    private final Deployments deployments;
     
-    public SpringJobs(RestOperations restOperations, URI root, Tasks tasks) {
+    public SpringJobs(RestOperations restOperations, URI root, Tasks tasks, Deployments deployments) {
         super(restOperations, root);
         this.tasks = tasks;
+        this.deployments = deployments;
     }
 
     @Override
@@ -70,7 +77,7 @@ public class SpringJobs extends AbstractSpringOperations implements Jobs{
         // For responses that have a Content-Type of application/x-gzip, we need to
         // decompress them. The RestTemplate and HttpClient don't handle this for
         // us
-        return exchange(() -> {
+        return createObservable(() -> {
             UriComponentsBuilder builder = UriComponentsBuilder.fromUri(this.root);
             builderCallback.accept(builder);
             URI uri = builder.build().toUri();
@@ -110,5 +117,57 @@ public class SpringJobs extends AbstractSpringOperations implements Jobs{
             throw new DirectorException("Unable to decompress log data", e);
         }
     }
+    
+    private Observable<Task> changeJobState(String deploymentName, Consumer<UriComponentsBuilder> builderCallback) {
+        HttpHeaders headers = new  HttpHeaders();
+        headers.put("content-type",Arrays.asList("text/yaml"));
+        
+        return deployments.get(new GetDeploymentRequest().withName(deploymentName))
+        .flatMap(deployment -> exchangeForEntity(deployment.getRawManifest(), Void.class, headers, HttpMethod.PUT, 
+                                builder -> builderCallback.accept(builder)))
+        .flatMap(response -> tasks.trackToCompletion(getTaskId(response)));
+    }
+    
+    private void buildChangeJobStateUri(String deployment, String job, Integer index, String newState, boolean skipDrain, UriComponentsBuilder builder) {
+        builder.pathSegment("deployments", deployment, "jobs", job);
+        if(index != null){
+            builder.pathSegment(String.valueOf(index));
+        }
+        builder.queryParam("state", newState);
+        if(skipDrain){
+            builder.queryParam("skip_drain", "true");
+        }
+    }
 
+    @Override
+    public Observable<Task> stopJob(StopJobRequest request) {
+        return changeJobState(request.getDeploymentName(), builder -> {
+            String newState = "stopped";
+            if(request.isPowerOffVm()){
+                newState = "detached";
+            }
+            buildChangeJobStateUri(request.getDeploymentName(), request.getJobName(), request.getJobIndex(), newState, request.isSkipDrain(), builder);
+        });
+    }
+    
+    @Override
+    public Observable<Task> startJob(StartJobRequest request) {
+        return changeJobState(request.getDeploymentName(), builder -> {
+            buildChangeJobStateUri(request.getDeploymentName(), request.getJobName(), request.getJobIndex(), "started", false, builder);
+        });
+    }
+
+    @Override
+    public Observable<Task> restartJob(RestartJobRequest request) {
+        return changeJobState(request.getDeploymentName(), builder -> {
+           buildChangeJobStateUri(request.getDeploymentName(), request.getJobName(), request.getJobIndex(), "restart", false, builder);
+        });
+    }
+
+    @Override
+    public Observable<Task> recreateJob(RecreateJobRequest request) {
+        return changeJobState(request.getDeploymentName(), builder -> {
+            buildChangeJobStateUri(request.getDeploymentName(), request.getJobName(), request.getJobIndex(), "recreate", false, builder);
+         });
+    }
 }
