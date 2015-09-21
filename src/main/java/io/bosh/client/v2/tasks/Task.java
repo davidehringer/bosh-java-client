@@ -15,6 +15,9 @@
  */
 package io.bosh.client.v2.tasks;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
@@ -22,6 +25,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Task {
+    
+    private static final List<String> COMPLETED_STATES = Arrays.asList("done", "error", "cancelled");
 
     private String id;
     private String state;
@@ -52,6 +57,10 @@ public class Task {
 
     public String getUser() {
         return user;
+    }
+    
+    public boolean isInProgress(){
+        return !COMPLETED_STATES.contains(getState());
     }
 
     @Override

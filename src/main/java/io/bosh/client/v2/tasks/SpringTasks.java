@@ -19,7 +19,6 @@ import io.bosh.client.v2.internal.AbstractSpringOperations;
 
 import java.net.URI;
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.web.client.RestOperations;
@@ -34,7 +33,6 @@ public class SpringTasks extends AbstractSpringOperations implements Tasks {
 
     private static final int DEFAULT_RECENT_TASK_COUNT = 30;
     private static final int TASK_TRACKING_POLL_INTERVAL = 1000;
-    private static final List<String> COMPLETED_STATES = Arrays.asList("done", "error", "cancelled");
     
     public SpringTasks(RestOperations restOperations, URI root) {
         super(restOperations, root);
@@ -71,11 +69,8 @@ public class SpringTasks extends AbstractSpringOperations implements Tasks {
     public Observable<Task> trackToCompletion(String id) {
         return Observable.interval(TASK_TRACKING_POLL_INTERVAL, TimeUnit.MILLISECONDS, Schedulers.io())
                 .flatMap(tick -> get(id))
-                .skipWhile(task -> inProgress(task)) // TODO consider condition for max tries/timeout
+                .skipWhile(task -> task.isInProgress()) // TODO consider condition for max tries/timeout
                 .first();
     }
 
-    private boolean inProgress(Task task) {
-        return !COMPLETED_STATES.contains(task.getState());
-    }
 }
