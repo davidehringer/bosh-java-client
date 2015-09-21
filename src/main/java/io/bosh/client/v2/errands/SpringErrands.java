@@ -15,14 +15,14 @@
  */
 package io.bosh.client.v2.errands;
 
+import io.bosh.client.v2.internal.AbstractSpringOperations;
+
 import java.net.URI;
 import java.util.Arrays;
 
 import org.springframework.web.client.RestOperations;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import rx.Observable;
-import io.bosh.client.v2.internal.AbstractSpringOperations;
 
 /**
  * @author David Ehringer
