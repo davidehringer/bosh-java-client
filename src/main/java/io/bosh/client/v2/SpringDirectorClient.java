@@ -57,10 +57,10 @@ public class SpringDirectorClient implements DirectorClient {
         this.info = new SpringInfo(restTemplate, root);
         this.releases = new SpringReleases(restTemplate, root);
         this.stemcells = new SpringStemcells(restTemplate, root);
-        this.deployments = new SpringDeployments(restTemplate, root);
         this.vms = new SpringVms(restTemplate, root);
         this.errands = new SpringErrands(restTemplate, root);
         this.tasks = new SpringTasks(restTemplate, root);
+        this.deployments = new SpringDeployments(restTemplate, root, tasks);
         this.jobs = new SpringJobs(restTemplate, root, tasks);
     }
     

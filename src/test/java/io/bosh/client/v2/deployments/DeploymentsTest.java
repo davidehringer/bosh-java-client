@@ -3,8 +3,9 @@ package io.bosh.client.v2.deployments;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.junit.Assert.fail;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import io.bosh.client.AbstractDirectorTest;
 
@@ -16,6 +17,8 @@ import org.junit.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+
+import rx.observers.TestSubscriber;
 
 /**
  * @author David Ehringer
@@ -83,10 +86,16 @@ public class DeploymentsTest extends AbstractDirectorTest{
                 .andRespond(withSuccess(payload("deployments/cloudcheck-results-clean.json"), MediaType.TEXT_HTML));
         
         // When
-        deployments.cloudcheck("cf-redis-61423dfddec885b6e28d").subscribe(results -> {
-            // Then
-            assertThat(results.size(), is(0));
-        });
+        TestSubscriber<List<Problem>> subscriber = new TestSubscriber<List<Problem>>();
+        deployments.cloudcheck("cf-redis-61423dfddec885b6e28d").subscribe(subscriber);
+        subscriber.awaitTerminalEvent();
+        
+        // Then
+        subscriber.assertCompleted();
+        subscriber.assertNoErrors();
+        assertThat(subscriber.getOnNextEvents().get(0).size(), is(0));
+        
+        mockServer.verify();
     }
     
     @Test
@@ -105,6 +114,9 @@ public class DeploymentsTest extends AbstractDirectorTest{
                 .andRespond(withSuccess(payload("deployments/cloudcheck-task-complete.json"), MediaType.TEXT_HTML));
         mockServer.expect(requestTo(url("/deployments/cf-redis-61423dfddec885b6e28d/problems")))
                 .andRespond(withSuccess(payload("deployments/cloudcheck-results-problems.json"), MediaType.TEXT_HTML));
+        
+        // TODO use testsubscriber like test above
+        fail();
         
         // When
         deployments.cloudcheck("cf-redis-61423dfddec885b6e28d").subscribe(results -> {

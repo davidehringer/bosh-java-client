@@ -17,6 +17,7 @@ package io.bosh.client.v2.deployments;
 
 import io.bosh.client.v2.DirectorException;
 import io.bosh.client.v2.internal.AbstractSpringOperations;
+import io.bosh.client.v2.tasks.Tasks;
 
 import java.io.IOException;
 import java.net.URI;
@@ -36,8 +37,11 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
  */
 public class SpringDeployments extends AbstractSpringOperations implements Deployments {
 
-    public SpringDeployments(RestTemplate restTemplate, URI root) {
+    private final Tasks tasks;
+    
+    public SpringDeployments(RestTemplate restTemplate, URI root, Tasks tasks) {
         super(restTemplate, root);
+        this.tasks = tasks;
     }
 
     @Override
@@ -70,12 +74,9 @@ public class SpringDeployments extends AbstractSpringOperations implements Deplo
     @Override
     public Observable<List<Problem>> cloudcheck(String deploymentName) {
         return postForEntity(Void.class, null, builder -> builder.pathSegment("deployments", deploymentName, "scans"))
-                .flatMap(response -> {
-                    // TODO can we detect an error here?
-                    trackTask(response);
-                    return get(Problem[].class, builder -> builder.pathSegment("deployments", deploymentName, "problems"))
-                    .map(problems -> Arrays.asList(problems));
-                });
+                .flatMap(response -> tasks.trackToCompletion(getTaskId(response)))
+                .flatMap(task -> get(Problem[].class, builder -> builder.pathSegment("deployments", deploymentName, "problems")))
+                .map(problems -> Arrays.asList(problems));
     }
 
 }
