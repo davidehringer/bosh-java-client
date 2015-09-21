@@ -60,15 +60,9 @@ public class SpringJobs extends AbstractSpringOperations implements Jobs{
                            .pathSegment("logs")
                            .queryParam("type", request.getLogType().getType())
                            .queryParam("filters", String.join(",", request.getFilters())))
-                 .flatMap(response -> tasks.trackToCompletion(getTaskId(response)))
-                 .flatMap(task -> {
-                   System.out.println("task: " + task.getResult());
-                   return  getGzip(builder -> builder.pathSegment("resources", task.getResult()));
-                 })
-                 .map(file -> {
-                     System.out.println("file: " + file);
-                     return createInputStream(file);
-                 });
+               .flatMap(response -> tasks.trackToCompletion(getTaskId(response)))
+               .flatMap(task -> getGzip(builder -> builder.pathSegment("resources", task.getResult())))
+               .map(file -> createInputStream(file));
     }
 
 
