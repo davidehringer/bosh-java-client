@@ -18,9 +18,9 @@ package io.bosh.client;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import io.bosh.client.v2.DirectorClient;
-import io.bosh.client.v2.SpringDirectorClient;
-import io.bosh.client.v2.SpringDirectorClientBuilder;
+import io.bosh.client.DirectorClient;
+import io.bosh.client.SpringDirectorClient;
+import io.bosh.client.SpringDirectorClientBuilder;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.web.client.MockRestServiceServer;

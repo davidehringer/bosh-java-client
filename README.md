@@ -2,10 +2,9 @@
 
 [bosh.io](http://bosh.io)
 
-This client is currently in an beta state and subject to significant changes. Only read-only
-are supported.
+This client is currently in an beta state and subject to significant changes.
 
-## v2 Usage
+## Usage
 
 ```
 DirectorClient client = new SpringDirectorClientBuilder()
