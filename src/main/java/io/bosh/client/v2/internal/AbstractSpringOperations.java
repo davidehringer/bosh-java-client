@@ -124,7 +124,7 @@ public abstract class AbstractSpringOperations {
         throw new IllegalArgumentException("Response does not have a redirect header for a task");
     }
 
-    // TODO clean this up and move to Tasks
+    // TODO delete this after removing all uses of it
     @SuppressWarnings("unchecked")
     protected String trackTask(ResponseEntity<?> response) {
         // TODO assert redirect

@@ -17,6 +17,7 @@ package io.bosh.client.v2.vms;
 
 import io.bosh.client.v2.DirectorException;
 import io.bosh.client.v2.internal.AbstractSpringOperations;
+import io.bosh.client.v2.tasks.Tasks;
 
 import java.io.IOException;
 import java.net.URI;
@@ -24,10 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestOperations;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import rx.Observable;
 
@@ -39,9 +37,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class SpringVms extends AbstractSpringOperations implements Vms {
 
     private final ObjectMapper mapper = new ObjectMapper();
+    private final Tasks tasks;
     
-    public SpringVms(RestOperations restOperations, URI root) {
+    public SpringVms(RestOperations restOperations, URI root, Tasks tasks) {
         super(restOperations, root);
+        this.tasks = tasks;
     }
 
     @Override
@@ -50,44 +50,28 @@ public class SpringVms extends AbstractSpringOperations implements Vms {
                 builder -> builder.pathSegment("deployments", request.getDeploymentName(), "vms"))
                 .map(results -> new ListVmsResponse().withVms(Arrays.asList(results)));
     }
-
+    
     @Override
     public Observable<ListVmDetailsResponse> listDetails(final ListVmDetailsRequest request) {
-        return Observable.create(subscriber -> {
-            try {
-                URI vmsUri = UriComponentsBuilder.fromUri(this.root)
-                        .pathSegment("deployments", request.getDeploymentName(), "vms")
-                        .queryParam("format", "full").build().toUri();
-                ResponseEntity<Void> response = this.restOperations
-                        .getForEntity(vmsUri, Void.class);
-                String taskId = trackTask(response);
-
-                URI taskOutputUri = UriComponentsBuilder.fromUri(this.root)
-                        .pathSegment("tasks", taskId, "output").queryParam("type", "result")
-                        .build().toUri();
-                String taskResult = this.restOperations.getForObject(taskOutputUri, String.class);
-
-                // TODO refactor mess
-
+        return getEntity(Void.class, builder -> builder.pathSegment("deployments", request.getDeploymentName(), "vms")
+                        .queryParam("format", "full"))
+            .flatMap(response -> tasks.trackToCompletion(getTaskId(response)))
+            .flatMap(task -> get(String.class, builder -> builder.pathSegment("tasks", task.getId(), "output")
+                                                           .queryParam("type", "result")))
+            .filter(rawDetails -> rawDetails != null)
+            .map(rawDetails -> rawDetails.split("\n"))
+            .map(rawDetails -> {
                 List<VmDetails> details = new ArrayList<VmDetails>();
-                // not all deployments have running vms... for example errand
-                // only deployments
-                if (taskResult != null) {
-                    for (String vm : taskResult.split("\n")) {
-                        try {
-                            details.add(mapper.readValue(vm.getBytes(), VmDetails.class));
-                        } catch (IOException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
+                for (String vm : rawDetails) {
+                    try {
+                        details.add(mapper.readValue(vm.getBytes(), VmDetails.class));
+                    } catch (IOException e) {
+                        throw new DirectorException("Unable to read VM data into VmDetails: " + vm, e);
                     }
                 }
-                subscriber.onNext(new ListVmDetailsResponse().withVms(details));
-                subscriber.onCompleted();
-            } catch (HttpStatusCodeException e) {
-                subscriber.onError(new DirectorException(e.getMessage(), e));
-            }
-        });
+                return details;
+             })
+             .map(vms -> new ListVmDetailsResponse().withVms(vms));
     }
 
 }
