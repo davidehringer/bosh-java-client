@@ -97,7 +97,7 @@ public abstract class AbstractSpringOperations {
             builderCallback.accept(builder);
             URI uri = builder.build().toUri();
 
-            this.logger.debug("GET {}", uri);
+            this.logger.debug("POST {}", uri);
             return this.restOperations.postForEntity(uri, request, responseType);
         });
     }
@@ -110,11 +110,21 @@ public abstract class AbstractSpringOperations {
                 subscriber.onCompleted();
             } catch (HttpStatusCodeException e) {
                  subscriber.onError(new DirectorException(e.getMessage(), e));
-                // TODO
             }
         });
     }
+    
+    protected String getTaskId(ResponseEntity<?> response){
+        // https://10.174.52.151/tasks/3307
+        Pattern pattern = Pattern.compile(".*/tasks/(.*)$");
+        Matcher matcher = pattern.matcher(response.getHeaders().getLocation().toString());
+        if (matcher.matches()) {
+            return matcher.group(1);
+        }
+        throw new IllegalArgumentException("Response does not have a redirect header for a task");
+    }
 
+    // TODO clean this up and move to Tasks
     @SuppressWarnings("unchecked")
     protected String trackTask(ResponseEntity<?> response) {
         // TODO assert redirect

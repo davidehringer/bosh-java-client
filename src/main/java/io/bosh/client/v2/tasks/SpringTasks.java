@@ -15,13 +15,17 @@
  */
 package io.bosh.client.v2.tasks;
 
+import io.bosh.client.v2.internal.AbstractSpringOperations;
+
 import java.net.URI;
 import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.web.client.RestOperations;
 
-import io.bosh.client.v2.internal.AbstractSpringOperations;
 import rx.Observable;
+import rx.schedulers.Schedulers;
 
 /**
  * @author David Ehringer
@@ -29,6 +33,8 @@ import rx.Observable;
 public class SpringTasks extends AbstractSpringOperations implements Tasks {
 
     private static final int DEFAULT_RECENT_TASK_COUNT = 30;
+    private static final int TASK_TRACKING_POLL_INTERVAL = 1000;
+    private static final List<String> COMPLETED_STATES = Arrays.asList("done", "error", "cancelled");
     
     public SpringTasks(RestOperations restOperations, URI root) {
         super(restOperations, root);
@@ -61,4 +67,15 @@ public class SpringTasks extends AbstractSpringOperations implements Tasks {
         return get(Task.class, builder -> builder.pathSegment("tasks", id));
     }
 
+    @Override
+    public Observable<Task> trackToCompletion(String id) {
+        return Observable.interval(TASK_TRACKING_POLL_INTERVAL, TimeUnit.MILLISECONDS, Schedulers.io())
+                .flatMap(tick -> get(id))
+                .skipWhile(task -> inProgress(task)) // TODO consider condition for max tries/timeout
+                .first();
+    }
+
+    private boolean inProgress(Task task) {
+        return !COMPLETED_STATES.contains(task.getState());
+    }
 }

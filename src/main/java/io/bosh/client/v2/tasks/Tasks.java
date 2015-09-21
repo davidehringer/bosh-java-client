@@ -29,4 +29,6 @@ public interface Tasks {
     Observable<ListTasksResponse> listRecent(int count);
     
     Observable<Task> get(String id);
+    
+    Observable<Task> trackToCompletion(String id);
 }

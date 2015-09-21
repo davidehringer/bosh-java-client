@@ -15,24 +15,26 @@
  */
 package io.bosh.client.v2;
 
-import java.net.URI;
-
-import org.springframework.web.client.RestTemplate;
-
 import io.bosh.client.v2.deployments.Deployments;
 import io.bosh.client.v2.deployments.SpringDeployments;
 import io.bosh.client.v2.errands.Errands;
 import io.bosh.client.v2.errands.SpringErrands;
 import io.bosh.client.v2.info.Info;
 import io.bosh.client.v2.info.SpringInfo;
+import io.bosh.client.v2.jobs.Jobs;
+import io.bosh.client.v2.jobs.SpringJobs;
 import io.bosh.client.v2.releases.Releases;
 import io.bosh.client.v2.releases.SpringReleases;
-import io.bosh.client.v2.stemcells.Stemcells;
 import io.bosh.client.v2.stemcells.SpringStemcells;
+import io.bosh.client.v2.stemcells.Stemcells;
 import io.bosh.client.v2.tasks.SpringTasks;
 import io.bosh.client.v2.tasks.Tasks;
 import io.bosh.client.v2.vms.SpringVms;
 import io.bosh.client.v2.vms.Vms;
+
+import java.net.URI;
+
+import org.springframework.web.client.RestTemplate;
 
 /**
  * @author David Ehringer
@@ -45,6 +47,7 @@ public class SpringDirectorClient implements DirectorClient {
     private final Releases releases;
     private final Stemcells stemcells;
     private final Deployments deployments;
+    private final Jobs jobs;
     private final Vms vms;
     private final Errands errands;
     private final Tasks tasks;
@@ -58,6 +61,7 @@ public class SpringDirectorClient implements DirectorClient {
         this.vms = new SpringVms(restTemplate, root);
         this.errands = new SpringErrands(restTemplate, root);
         this.tasks = new SpringTasks(restTemplate, root);
+        this.jobs = new SpringJobs(restTemplate, root, tasks);
     }
     
     public RestTemplate restTemplate(){
@@ -97,6 +101,12 @@ public class SpringDirectorClient implements DirectorClient {
     @Override
     public Tasks tasks() {
         return tasks;
+    }
+
+
+    @Override
+    public Jobs jobs() {
+        return jobs;
     }
 
 }

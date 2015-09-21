@@ -16,12 +16,12 @@
 package io.bosh.client;
 
 import io.bosh.client.domain.DeploymentDetails;
-import io.bosh.client.domain.LogType;
 import io.bosh.client.domain.Release;
 import io.bosh.client.v2.deployments.Deployment;
 import io.bosh.client.v2.deployments.Problem;
 import io.bosh.client.v2.errands.ErrandSummary;
 import io.bosh.client.v2.info.DirectorInfo;
+import io.bosh.client.v2.jobs.LogType;
 import io.bosh.client.v2.releases.GetReleaseResponse;
 import io.bosh.client.v2.stemcells.StemcellDetails;
 import io.bosh.client.v2.tasks.Task;
@@ -89,6 +89,7 @@ public interface DirectorOperations {
      */
     List<Problem> getProblems(String deploymentName);
     
+    // x
     InputStream fetchLogs(String deploymentName, String jobName, int jobIndex, LogType logType, String... filters);
 
     

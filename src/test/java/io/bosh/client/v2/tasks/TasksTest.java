@@ -4,17 +4,15 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
-
-import java.util.List;
-
 import io.bosh.client.AbstractDirectorTest;
 
-
-
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.MediaType;
+
+import rx.observers.TestSubscriber;
 
 /**
  * @author David Ehringer
@@ -79,6 +77,39 @@ public class TasksTest extends AbstractDirectorTest{
             assertThat(response.getDescription(), is("fetch logs"));
             assertThat(response.getUser(), is("admin"));
         });
+    }
+    
+
+    @Test
+    public void trackToCompletion() {
+        // Given
+        mockServer.expect(requestTo(url("/tasks/68")))//
+                .andRespond(withSuccess(payload("tasks/in-progress-task.json"), MediaType.TEXT_HTML));
+        mockServer.expect(requestTo(url("/tasks/68")))//
+                .andRespond(withSuccess(payload("tasks/in-progress-task.json"), MediaType.TEXT_HTML));
+        mockServer.expect(requestTo(url("/tasks/68")))//
+                .andRespond(withSuccess(payload("tasks/in-progress-task.json"), MediaType.TEXT_HTML));
+        mockServer.expect(requestTo(url("/tasks/68")))//
+                .andRespond(withSuccess(payload("tasks/in-progress-task.json"), MediaType.TEXT_HTML));
+        mockServer.expect(requestTo(url("/tasks/68")))//
+                .andRespond(withSuccess(payload("tasks/done-task.json"), MediaType.TEXT_HTML));
+        // When
+        TestSubscriber<Task> subscriber = new TestSubscriber<Task>();
+        tasks.trackToCompletion("68").subscribe(subscriber);
+        subscriber.awaitTerminalEvent();
+        
+        //Then
+        subscriber.assertCompleted();
+        subscriber.assertNoErrors();
+        Task task = subscriber.getOnNextEvents().get(0);
+        assertThat(task.getId(), is("68"));
+        assertThat(task.getState(), is("done"));
+        assertThat(task.getTimestamp(), is("14375326235"));
+        assertThat(task.getDescription(), is("fetch logs"));
+        assertThat(task.getUser(), is("admin"));
+        assertThat(task.getResult(), is("task is done"));     
+        
+        mockServer.verify(); 
     }
 
 }

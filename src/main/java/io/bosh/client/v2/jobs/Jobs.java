@@ -15,9 +15,14 @@
  */
 package io.bosh.client.v2.jobs;
 
+import java.io.InputStream;
+
+import rx.Observable;
+
 /**
  * @author David Ehringer
  */
 public interface Jobs {
 
+    Observable<InputStream> fetchLogs(FetchLogsRequest request);
 }
