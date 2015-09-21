@@ -45,15 +45,15 @@ public class SpringVms extends AbstractSpringOperations implements Vms {
     }
 
     @Override
-    public Observable<ListVmsResponse> list(ListVmsRequest request) {
+    public Observable<ListVmsResponse> list(String deploymentName) {
         return get(Vm[].class,
-                builder -> builder.pathSegment("deployments", request.getDeploymentName(), "vms"))
+                builder -> builder.pathSegment("deployments", deploymentName, "vms"))
                 .map(results -> new ListVmsResponse().withVms(Arrays.asList(results)));
     }
     
     @Override
-    public Observable<ListVmDetailsResponse> listDetails(final ListVmDetailsRequest request) {
-        return getEntity(Void.class, builder -> builder.pathSegment("deployments", request.getDeploymentName(), "vms")
+    public Observable<ListVmDetailsResponse> listDetails(String deploymentName) {
+        return getEntity(Void.class, builder -> builder.pathSegment("deployments", deploymentName, "vms")
                         .queryParam("format", "full"))
             .flatMap(response -> tasks.trackToCompletion(getTaskId(response)))
             .flatMap(task -> get(String.class, builder -> builder.pathSegment("tasks", task.getId(), "output")

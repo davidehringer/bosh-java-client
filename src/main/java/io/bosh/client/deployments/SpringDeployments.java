@@ -53,11 +53,11 @@ public class SpringDeployments extends AbstractSpringOperations implements Deplo
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public Observable<GetDeploymentResponse> get(GetDeploymentRequest request) {
+    public Observable<GetDeploymentResponse> get(String deploymentName) {
         return get(GetDeploymentResponse.class, 
-                   builder -> builder.pathSegment("deployments", request.getName()))
+                   builder -> builder.pathSegment("deployments", deploymentName))
                .map(response -> {
-                   response.setName(request.getName());
+                   response.setName(deploymentName);
 
                    ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
                    Map manifestMap = null;

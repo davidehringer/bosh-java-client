@@ -8,12 +8,6 @@ import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import io.bosh.client.AbstractDirectorTest;
-import io.bosh.client.vms.ListVmDetailsRequest;
-import io.bosh.client.vms.ListVmDetailsResponse;
-import io.bosh.client.vms.ListVmsRequest;
-import io.bosh.client.vms.Vm;
-import io.bosh.client.vms.VmDetails;
-import io.bosh.client.vms.Vms;
 
 import java.util.List;
 
@@ -42,8 +36,7 @@ public class VmsTest extends AbstractDirectorTest{
         mockServer.expect(requestTo(url("/deployments/example/vms")))//
                 .andRespond(withSuccess(payload("vms/vms.json"), MediaType.TEXT_HTML));
         // When
-        ListVmsRequest request = new ListVmsRequest().withDeploymentName("example");
-        vms.list(request).subscribe(response -> {
+        vms.list("example").subscribe(response -> {
             List<Vm> v = response.getVms();
             
             // Then
@@ -75,10 +68,8 @@ public class VmsTest extends AbstractDirectorTest{
                         withSuccess(payload("vms/vms-full.json"), MediaType.TEXT_HTML));
         
         // When
-        ListVmDetailsRequest request = new ListVmDetailsRequest().withDeploymentName("example");
-        
         TestSubscriber<ListVmDetailsResponse> subscriber = new TestSubscriber<ListVmDetailsResponse>();
-        vms.listDetails(request).subscribe(subscriber);
+        vms.listDetails("example").subscribe(subscriber);
         subscriber.awaitTerminalEvent();
 
         // Then

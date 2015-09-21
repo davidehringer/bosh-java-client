@@ -24,5 +24,5 @@ public interface Releases {
 
     Observable<ListReleasesResponse> list();
     
-    Observable<GetReleaseResponse> get(GetReleaseRequest request);
+    Observable<GetReleaseResponse> get(String releaseName);
 }

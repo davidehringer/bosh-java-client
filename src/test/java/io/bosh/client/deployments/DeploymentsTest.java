@@ -8,10 +8,6 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import io.bosh.client.AbstractDirectorTest;
-import io.bosh.client.deployments.Deployment;
-import io.bosh.client.deployments.Deployments;
-import io.bosh.client.deployments.GetDeploymentRequest;
-import io.bosh.client.deployments.Problem;
 
 import java.util.List;
 
@@ -61,8 +57,7 @@ public class DeploymentsTest extends AbstractDirectorTest{
         mockServer.expect(requestTo(url("/deployments/cf-redis-61423dfddec885b6e28d")))//
                 .andRespond(withSuccess(payload("deployments/deployment.json"), MediaType.TEXT_HTML));
         // When
-        GetDeploymentRequest request = new GetDeploymentRequest().withName("cf-redis-61423dfddec885b6e28d");
-        deployments.get(request).subscribe(response -> {
+        deployments.get("cf-redis-61423dfddec885b6e28d").subscribe(response -> {
 
             // Then
             assertThat(response.getName(), is("cf-redis-61423dfddec885b6e28d"));

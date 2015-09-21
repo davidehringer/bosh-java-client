@@ -41,11 +41,11 @@ public class SpringReleases extends AbstractSpringOperations implements Releases
     }
 
     @Override
-    public Observable<GetReleaseResponse> get(GetReleaseRequest request) {
+    public Observable<GetReleaseResponse> get(String releaseName) {
         return get(GetReleaseResponse.class,
-                builder -> builder.pathSegment("releases", request.getName()))
+                builder -> builder.pathSegment("releases", releaseName))
                .map(response -> {
-                   response.setName(request.getName());
+                   response.setName(releaseName);
                    return response;
                });
     }

@@ -5,9 +5,6 @@ import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import io.bosh.client.AbstractDirectorTest;
-import io.bosh.client.releases.GetReleaseRequest;
-import io.bosh.client.releases.Release;
-import io.bosh.client.releases.Releases;
 
 import java.util.List;
 
@@ -53,8 +50,7 @@ public class ReleasesTest extends AbstractDirectorTest{
         mockServer.expect(requestTo(url("/releases/cf-redis")))//
                 .andRespond(withSuccess(payload("releases/release.json"), MediaType.TEXT_HTML));
         // When
-        GetReleaseRequest request = new GetReleaseRequest().withName("cf-redis");
-        releases.get(request).subscribe(release -> {
+        releases.get("cf-redis").subscribe(release -> {
 
             // Then
             assertThat(release.getName(), is("cf-redis"));

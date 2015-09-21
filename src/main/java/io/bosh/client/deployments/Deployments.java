@@ -26,7 +26,7 @@ public interface Deployments {
 
     Observable<ListDeploymentsResponse> list();
     
-    Observable<GetDeploymentResponse> get(GetDeploymentRequest request);
+    Observable<GetDeploymentResponse> get(String deploymentName);
     
     Observable<List<Problem>> cloudcheck(String deploymentName);
 }

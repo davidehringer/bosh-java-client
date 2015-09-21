@@ -22,5 +22,5 @@ import rx.Observable;
  */
 public interface Errands {
 
-    Observable<ListErrandsResponse> list(ListErrandsRequest request);
+    Observable<ListErrandsResponse> list(String deploymentName);
 }

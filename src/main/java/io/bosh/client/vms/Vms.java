@@ -22,7 +22,7 @@ import rx.Observable;
  */
 public interface Vms {
 
-    Observable<ListVmsResponse> list(ListVmsRequest request);
+    Observable<ListVmsResponse> list(String deploymentName);
     
-    Observable<ListVmDetailsResponse> listDetails(ListVmDetailsRequest request); 
+    Observable<ListVmDetailsResponse> listDetails(String deploymentName); 
 }

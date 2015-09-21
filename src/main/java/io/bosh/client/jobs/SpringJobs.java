@@ -17,7 +17,6 @@ package io.bosh.client.jobs;
 
 import io.bosh.client.DirectorException;
 import io.bosh.client.deployments.Deployments;
-import io.bosh.client.deployments.GetDeploymentRequest;
 import io.bosh.client.internal.AbstractSpringOperations;
 import io.bosh.client.tasks.Task;
 import io.bosh.client.tasks.Tasks;
@@ -122,7 +121,7 @@ public class SpringJobs extends AbstractSpringOperations implements Jobs{
         HttpHeaders headers = new  HttpHeaders();
         headers.put("content-type",Arrays.asList("text/yaml"));
         
-        return deployments.get(new GetDeploymentRequest().withName(deploymentName))
+        return deployments.get(deploymentName)
         .flatMap(deployment -> exchangeForEntity(deployment.getRawManifest(), Void.class, headers, HttpMethod.PUT, 
                                 builder -> builderCallback.accept(builder)))
         .flatMap(response -> tasks.trackToCompletion(getTaskId(response)));

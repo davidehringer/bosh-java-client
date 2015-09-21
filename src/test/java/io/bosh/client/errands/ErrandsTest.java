@@ -20,9 +20,6 @@ import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import io.bosh.client.AbstractDirectorTest;
-import io.bosh.client.errands.ErrandSummary;
-import io.bosh.client.errands.Errands;
-import io.bosh.client.errands.ListErrandsRequest;
 
 import java.util.List;
 
@@ -48,8 +45,7 @@ public class ErrandsTest extends AbstractDirectorTest{
         mockServer.expect(requestTo(url("/deployments/test/errands")))//
                 .andRespond(withSuccess(payload("errands/errands.json"), MediaType.TEXT_HTML));
         // When
-        ListErrandsRequest request = new ListErrandsRequest().withDeploymentName("test");
-        errands.list(request).subscribe(response -> {
+        errands.list("test").subscribe(response -> {
             // Then
             List<ErrandSummary> summaries = response.getErrands();
             

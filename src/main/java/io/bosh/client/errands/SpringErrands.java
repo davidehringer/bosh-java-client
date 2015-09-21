@@ -34,8 +34,8 @@ public class SpringErrands extends AbstractSpringOperations implements Errands {
     }
 
     @Override
-    public Observable<ListErrandsResponse> list(ListErrandsRequest request) {
-        return get( ErrandSummary[].class, builder -> builder.pathSegment("deployments", request.getDeploymentName(), "errands"))
+    public Observable<ListErrandsResponse> list(String deploymentName) {
+        return get( ErrandSummary[].class, builder -> builder.pathSegment("deployments", deploymentName, "errands"))
                .map(response -> new ListErrandsResponse().withErrands(Arrays.asList(response)));
     }
 }
