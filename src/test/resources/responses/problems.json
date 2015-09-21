@@ -1,1 +1,0 @@
-[{id=3, type=missing_vm, data={}, description=VM with cloud ID `119a7bd7-6a42-4e21-7d48-7a3c06f43911' missing., resolutions=[{name=ignore, plan=Ignore problem}, {name=recreate_vm, plan=Recreate VM using last known apply spec}, {name=delete_vm_reference, plan=Delete VM reference (DANGEROUS!)}]}]
