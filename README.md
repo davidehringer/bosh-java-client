@@ -24,10 +24,18 @@ DirectorClient client = new SpringDirectorClientBuilder()
 You can consume the [Observables](http://reactivex.io/RxJava/javadoc/rx/Observable.html) in a variety of ways such as
 ```
 Deployments deployments = client.deployments();
-deployments.list().subscribe(response -> {
-            List<Deployment> deps = response.getDeployments();
+deployments.list().subscribe(deploymentList -> {
+            
 			// ...
         });         
+
+// or
+Deployments deployments = client.deployments();
+deployments.list().subscribe(deploymentList -> {
+    // ...
+    }, error -> {
+        // handle error
+    });
 ```
 or
 ```
