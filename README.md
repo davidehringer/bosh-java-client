@@ -53,6 +53,11 @@ InputStream logs = client.jobs().fetchLogs(request).toBlocking().first();
 The BOSH team does not currently consider the Director API to be public and it may be subject to breaking changes
 between releases. Please test against the specific version of BOSH that you are running.
 
+## Logging
+
+The project uses commons-logging. To enable logging of all the calls (the URL being called, not the payload)
+to the BOSH Director, set the logging level of the `BOSH_Director_API` to `INFO`.
+
 ## Continuous Integration
 
 The CI server for the project is hosted at https://gaptap.atlassian.net/builds/browse/BJC-BOS.
