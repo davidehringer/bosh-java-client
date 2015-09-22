@@ -27,8 +27,8 @@
 	</licenses>
 
 	<scm>
-		<connection>scm:git:git@github.com/davidehringer/bosh-java-client.git</connection>
-		<developerConnection>scm:git:git@github.com/davidehringer/bosh-java-client.git</developerConnection>
+		<connection>scm:git:git@github.com:davidehringer/bosh-java-client.git</connection>
+		<developerConnection>scm:git:git@github.com:davidehringer/bosh-java-client.git</developerConnection>
 		<url>https://github.com/davidehringer/bosh-java-client.git</url>
 	</scm>
 
