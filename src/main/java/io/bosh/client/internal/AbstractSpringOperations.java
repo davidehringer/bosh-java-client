@@ -40,7 +40,7 @@ import rx.Observable;
  */
 public abstract class AbstractSpringOperations {
 
-    private final Logger logger = LoggerFactory.getLogger("BOSH_Director_API");
+    private final Logger logger = LoggerFactory.getLogger("BOSH_DIRECTOR_API");
 
     protected final RestOperations restOperations;
     protected final URI root;

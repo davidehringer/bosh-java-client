@@ -56,7 +56,7 @@ between releases. Please test against the specific version of BOSH that you are 
 ## Logging
 
 The project uses commons-logging. To enable logging of all the calls (the URL being called, not the payload)
-to the BOSH Director, set the logging level of the `BOSH_Director_API` to `INFO`.
+to the BOSH Director, set the logging level of the `BOSH_DIRECTOR_API` to `INFO`.
 
 ## Continuous Integration
 
