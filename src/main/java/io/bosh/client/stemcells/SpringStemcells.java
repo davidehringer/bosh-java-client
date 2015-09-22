@@ -19,6 +19,7 @@ import io.bosh.client.internal.AbstractSpringOperations;
 
 import java.net.URI;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.web.client.RestOperations;
 
@@ -34,10 +35,10 @@ public class SpringStemcells extends AbstractSpringOperations implements Stemcel
     }
 
     @Override
-    public Observable<ListStemcellsResponse> list() {
-        return get(StemcellDetails[].class, 
+    public Observable<List<Stemcell>> list() {
+        return get(Stemcell[].class, 
                 builder -> builder.pathSegment("stemcells"))
-               .map(results -> new ListStemcellsResponse().withStemcells(Arrays.asList(results)));
+               .map(results -> Arrays.asList(results));
     }
 
 }

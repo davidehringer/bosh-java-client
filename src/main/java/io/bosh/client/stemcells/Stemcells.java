@@ -15,6 +15,8 @@
  */
 package io.bosh.client.stemcells;
 
+import java.util.List;
+
 import rx.Observable;
 
 /**
@@ -22,5 +24,5 @@ import rx.Observable;
  */
 public interface Stemcells {
 
-    Observable<ListStemcellsResponse> list();
+    Observable<List<Stemcell>> list();
 }

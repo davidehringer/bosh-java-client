@@ -36,15 +36,13 @@ public class VmsTest extends AbstractDirectorTest{
         mockServer.expect(requestTo(url("/deployments/example/vms")))//
                 .andRespond(withSuccess(payload("vms/vms.json"), MediaType.TEXT_HTML));
         // When
-        vms.list("example").subscribe(response -> {
-            List<Vm> v = response.getVms();
-            
+        vms.list("example").subscribe(vmList -> {
             // Then
-            assertThat(v.size(), is(1));
-            assertThat(v.get(0).getAgentId(), is("30096cdf-d96b-4c73-a9d0-55b50c6ce37d"));
-            assertThat(v.get(0).getCid(), is("5585315f-8280-4de6-6694-9b6ab2f21393"));
-            assertThat(v.get(0).getIndex(), is(0));
-            assertThat(v.get(0).getJob(), is("cfbackup"));
+            assertThat(vmList.size(), is(1));
+            assertThat(vmList.get(0).getAgentId(), is("30096cdf-d96b-4c73-a9d0-55b50c6ce37d"));
+            assertThat(vmList.get(0).getCid(), is("5585315f-8280-4de6-6694-9b6ab2f21393"));
+            assertThat(vmList.get(0).getIndex(), is(0));
+            assertThat(vmList.get(0).getJob(), is("cfbackup"));
         });
     }
 
@@ -68,15 +66,14 @@ public class VmsTest extends AbstractDirectorTest{
                         withSuccess(payload("vms/vms-full.json"), MediaType.TEXT_HTML));
         
         // When
-        TestSubscriber<ListVmDetailsResponse> subscriber = new TestSubscriber<ListVmDetailsResponse>();
+        TestSubscriber<List<Vm>> subscriber = new TestSubscriber<List<Vm>>();
         vms.listDetails("example").subscribe(subscriber);
         subscriber.awaitTerminalEvent();
 
         // Then
         subscriber.assertNoErrors();
         subscriber.assertCompleted();
-        ListVmDetailsResponse response = subscriber.getOnNextEvents().get(0);
-        List<VmDetails> details = response.getVmDetails();
+        List<Vm> details = subscriber.getOnNextEvents().get(0);
         
         // Then
         assertThat(details.size(), is(2));

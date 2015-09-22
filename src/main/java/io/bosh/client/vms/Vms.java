@@ -15,6 +15,8 @@
  */
 package io.bosh.client.vms;
 
+import java.util.List;
+
 import rx.Observable;
 
 /**
@@ -22,7 +24,7 @@ import rx.Observable;
  */
 public interface Vms {
 
-    Observable<ListVmsResponse> list(String deploymentName);
+    Observable<List<VmSummary>> list(String deploymentName);
     
-    Observable<ListVmDetailsResponse> listDetails(String deploymentName); 
+    Observable<List<Vm>> listDetails(String deploymentName); 
 }

@@ -15,6 +15,8 @@
  */
 package io.bosh.client.tasks;
 
+import java.util.List;
+
 import rx.Observable;
 
 /**
@@ -22,11 +24,11 @@ import rx.Observable;
  */
 public interface Tasks {
 
-    Observable<ListTasksResponse> listRunning();
+    Observable<List<Task>> listRunning();
     
-    Observable<ListTasksResponse> listRecent();
+    Observable<List<Task>> listRecent();
 
-    Observable<ListTasksResponse> listRecent(int count);
+    Observable<List<Task>> listRecent(int count);
     
     Observable<Task> get(String id);
     

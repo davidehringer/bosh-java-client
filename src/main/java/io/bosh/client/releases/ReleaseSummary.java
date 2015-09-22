@@ -18,19 +18,27 @@ package io.bosh.client.releases;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author David Ehringer
- */
-public class ListReleasesResponse {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    private final List<Release> releases = new ArrayList<Release>();
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class ReleaseSummary {
 
-    public List<Release> getReleases() {
-        return releases;
+    private String name;
+    @JsonProperty("release_versions")
+    private List<ReleaseVersion> releaseVersions = new ArrayList<ReleaseVersion>();
+
+    public String getName() {
+        return name;
     }
 
-    public ListReleasesResponse withReleases(List<Release> release) {
-        this.releases.addAll(release);
-        return this;
+    public List<ReleaseVersion> getVersions() {
+        return releaseVersions;
     }
+
+    @Override
+    public String toString() {
+        return "ReleaseDetails [name=" + name + ", release_versions=" + releaseVersions + "]";
+    }
+
 }

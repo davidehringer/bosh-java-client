@@ -23,13 +23,13 @@ import java.util.List;
  */
 public class ListStemcellsResponse {
 
-    private final List<StemcellDetails> stemcells = new ArrayList<StemcellDetails>();
+    private final List<Stemcell> stemcells = new ArrayList<Stemcell>();
 
-    public List<StemcellDetails> getStemcells() {
+    public List<Stemcell> getStemcells() {
         return stemcells;
     }
 
-    public ListStemcellsResponse withStemcells(List<StemcellDetails> stemcells){
+    public ListStemcellsResponse withStemcells(List<Stemcell> stemcells){
         this.stemcells.addAll(stemcells);
         return this;
     }

@@ -6,8 +6,6 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import io.bosh.client.AbstractDirectorTest;
 
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.MediaType;
@@ -30,9 +28,7 @@ public class ReleasesTest extends AbstractDirectorTest{
         mockServer.expect(requestTo(url("/releases")))//
                 .andRespond(withSuccess(payload("releases/releases.json"), MediaType.TEXT_HTML));
         // When
-        releases.list().subscribe(response -> {
-            List<Release> releases = response.getReleases();
-
+        releases.list().subscribe(releases -> {
             // Then
             assertThat(releases.size(), is(2));
             assertThat(releases.get(0).getName(), is("cf-redis"));

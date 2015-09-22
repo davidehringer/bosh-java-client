@@ -45,33 +45,32 @@ public class SpringVms extends AbstractSpringOperations implements Vms {
     }
 
     @Override
-    public Observable<ListVmsResponse> list(String deploymentName) {
-        return get(Vm[].class,
+    public Observable<List<VmSummary>> list(String deploymentName) {
+        return get(VmSummary[].class,
                 builder -> builder.pathSegment("deployments", deploymentName, "vms"))
-                .map(results -> new ListVmsResponse().withVms(Arrays.asList(results)));
+                .map(results -> Arrays.asList(results));
     }
     
     @Override
-    public Observable<ListVmDetailsResponse> listDetails(String deploymentName) {
+    public Observable<List<Vm>> listDetails(String deploymentName) {
         return getEntity(Void.class, builder -> builder.pathSegment("deployments", deploymentName, "vms")
                         .queryParam("format", "full"))
             .flatMap(response -> tasks.trackToCompletion(getTaskId(response)))
             .flatMap(task -> get(String.class, builder -> builder.pathSegment("tasks", task.getId(), "output")
-                                                           .queryParam("type", "result")))
+                                                           .queryParam("type", "result"))
             .filter(rawDetails -> rawDetails != null)
             .map(rawDetails -> rawDetails.split("\n"))
             .map(rawDetails -> {
-                List<VmDetails> details = new ArrayList<VmDetails>();
+                List<Vm> details = new ArrayList<Vm>();
                 for (String vm : rawDetails) {
                     try {
-                        details.add(mapper.readValue(vm.getBytes(), VmDetails.class));
+                        details.add(mapper.readValue(vm.getBytes(), Vm.class));
                     } catch (IOException e) {
                         throw new DirectorException("Unable to read VM data into VmDetails: " + vm, e);
                     }
                 }
                 return details;
-             })
-             .map(vms -> new ListVmDetailsResponse().withVms(vms));
+             }));
     }
 
 }

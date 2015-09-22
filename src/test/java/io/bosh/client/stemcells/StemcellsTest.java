@@ -5,10 +5,6 @@ import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import io.bosh.client.AbstractDirectorTest;
-import io.bosh.client.stemcells.StemcellDetails;
-import io.bosh.client.stemcells.Stemcells;
-
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -32,9 +28,7 @@ public class StemcellsTest extends AbstractDirectorTest{
         mockServer.expect(requestTo(url("/stemcells")))//
                 .andRespond(withSuccess(payload("stemcells/stemcells.json"), MediaType.TEXT_HTML));
         // When
-        stemcells.list().subscribe(response -> {
-            List<StemcellDetails> details = response.getStemcells();
-
+        stemcells.list().subscribe(details -> {
             // Then
             assertThat(details.size(), is(5));
             

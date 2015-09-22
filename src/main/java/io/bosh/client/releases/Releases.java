@@ -15,6 +15,8 @@
  */
 package io.bosh.client.releases;
 
+import java.util.List;
+
 import rx.Observable;
 
 /**
@@ -22,7 +24,7 @@ import rx.Observable;
  */
 public interface Releases {
 
-    Observable<ListReleasesResponse> list();
+    Observable<List<ReleaseSummary>> list();
     
-    Observable<GetReleaseResponse> get(String releaseName);
+    Observable<Release> get(String releaseName);
 }

@@ -5,10 +5,6 @@ import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import io.bosh.client.AbstractDirectorTest;
-import io.bosh.client.tasks.Task;
-import io.bosh.client.tasks.Tasks;
-
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,8 +30,7 @@ public class TasksTest extends AbstractDirectorTest{
         mockServer.expect(requestTo(url("/tasks?state=processing,cancelling,queued")))//
                 .andRespond(withSuccess(payload("tasks/running-tasks.json"), MediaType.TEXT_HTML));
         // When
-        tasks.listRunning().subscribe(response -> {
-            List<Task> taskList = response.getTasks();
+        tasks.listRunning().subscribe(taskList -> {
             // Then
             assertThat(taskList.size(), is(1));
             assertThat(taskList.get(0).getId(), is("68"));
@@ -49,8 +44,7 @@ public class TasksTest extends AbstractDirectorTest{
         mockServer.expect(requestTo(url("/tasks?limit=30&verbose=1")))//
                 .andRespond(withSuccess(payload("tasks/recent-tasks.json"), MediaType.TEXT_HTML));
         // When
-        tasks.listRecent().subscribe(response -> {
-            List<Task> taskList = response.getTasks();
+        tasks.listRecent().subscribe(taskList -> {
             // Then
             assertThat(taskList.size(), is(18));
         });

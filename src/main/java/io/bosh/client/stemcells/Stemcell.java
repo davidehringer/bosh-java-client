@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.bosh.client.deployments;
+package io.bosh.client.stemcells;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import static java.util.stream.Collectors.toList;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -25,35 +26,44 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @author David Ehringer
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GetDeploymentResponse {
+public class Stemcell {
 
     private String name;
-    private String manifest;
-    private Map<String, Object> manifestMap = new HashMap<String, Object>();
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    private String version;
+    private String cid;
+    private List<DeploymentName> deployments = new ArrayList<DeploymentName>();
 
     public String getName() {
         return name;
     }
 
-    public String getRawManifest() {
-        return manifest;
+    public String getVersion() {
+        return version;
     }
 
-    public Map<String, Object> getManifest() {
-        return Collections.unmodifiableMap(manifestMap);
+    public String getCid() {
+        return cid;
     }
 
-    public void setManifestMap(Map<String, Object> manifestMap) {
-        this.manifestMap.clear();
-        this.manifestMap.putAll(manifestMap);
+    public List<String> getDeployments() {
+        return deployments.stream().map(d -> d.getName()).collect(toList());
     }
 
     @Override
     public String toString() {
-        return "DeploymentDetails [name=" + name + ", manifest=" + manifest + "]";
+        return "StemcellDetails [name=" + name + ", version=" + version + ", cid=" + cid
+                + ", deployments=" + getDeployments() + "]";
     }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    static class DeploymentName {
+
+        private String name;
+
+        public String getName() {
+            return name;
+        }
+
+    }
+
 }

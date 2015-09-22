@@ -38,9 +38,7 @@ public class DeploymentsTest extends AbstractDirectorTest{
         mockServer.expect(requestTo(url("/deployments")))//
                 .andRespond(withSuccess(payload("deployments/deployments.json"), MediaType.TEXT_HTML));
         // When
-        deployments.list().subscribe(response -> {
-            List<Deployment> deps = response.getDeployments();
-
+        deployments.list().subscribe(deps -> {
             // Then
             assertThat(deps.size(), is(2));
             assertThat(deps.get(0).getName(), is("deployment-1"));

@@ -13,24 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.bosh.client.tasks;
+package io.bosh.client.deployments;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * @author David Ehringer
  */
-public class ListTasksResponse {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class DeploymentSummary {
 
-    private final List<Task> tasks = new ArrayList<Task>();
-    
-    public List<Task> getTasks() {
-        return tasks;
+    private String name;
+    private List<ReleaseSummary> releases = new ArrayList<ReleaseSummary>();
+    private List<StemcellSummary> stemcells = new ArrayList<StemcellSummary>();
+
+    public String getName() {
+        return name;
     }
 
-    public ListTasksResponse withErrands(List<Task> tasks) {
-        this.tasks.addAll(tasks);
-        return this;
+    public List<ReleaseSummary> getReleases() {
+        return releases;
     }
+
+    public List<StemcellSummary> getStemcells() {
+        return stemcells;
+    }
+
+    @Override
+    public String toString() {
+        return "Deployment [name=" + name + "]";
+    }
+
 }

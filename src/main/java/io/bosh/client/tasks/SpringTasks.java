@@ -19,6 +19,7 @@ import io.bosh.client.internal.AbstractSpringOperations;
 
 import java.net.URI;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.web.client.RestOperations;
@@ -39,25 +40,25 @@ public class SpringTasks extends AbstractSpringOperations implements Tasks {
     }
 
     @Override
-    public Observable<ListTasksResponse> listRunning() {
+    public Observable<List<Task>> listRunning() {
         return get(Task[].class,
                 builder -> builder.pathSegment("tasks")
                                    .queryParam("state", "processing,cancelling,queued"))
-               .map(response -> new ListTasksResponse().withErrands(Arrays.asList(response)));
+               .map(response -> Arrays.asList(response));
     }
 
     @Override
-    public Observable<ListTasksResponse> listRecent() {
+    public Observable<List<Task>> listRecent() {
         return listRecent(DEFAULT_RECENT_TASK_COUNT);
     }
 
     @Override
-    public Observable<ListTasksResponse> listRecent(int count) {
+    public Observable<List<Task>> listRecent(int count) {
         return get(Task[].class,
                 builder -> builder.pathSegment("tasks")
                                    .queryParam("limit", count)
                                    .queryParam("verbose", 1))
-               .map(response -> new ListTasksResponse().withErrands(Arrays.asList(response)));
+               .map(response -> Arrays.asList(response));
     }
 
     @Override

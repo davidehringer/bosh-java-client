@@ -15,6 +15,8 @@
  */
 package io.bosh.client.errands;
 
+import java.util.List;
+
 import rx.Observable;
 
 /**
@@ -22,5 +24,5 @@ import rx.Observable;
  */
 public interface Errands {
 
-    Observable<ListErrandsResponse> list(String deploymentName);
+    Observable<List<ErrandSummary>> list(String deploymentName);
 }

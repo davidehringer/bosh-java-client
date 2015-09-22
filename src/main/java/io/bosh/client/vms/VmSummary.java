@@ -15,22 +15,40 @@
  */
 package io.bosh.client.vms;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author David Ehringer
  */
-public class ListVmDetailsResponse {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class VmSummary {
 
-    private final List<VmDetails> vms = new ArrayList<VmDetails>();
+    @JsonProperty("agent_id")
+    private String agentId;
+    private String cid;
+    private String job;
+    private int index;
 
-    public List<VmDetails> getVmDetails() {
-        return vms;
+    public String getAgentId() {
+        return agentId;
     }
 
-    public ListVmDetailsResponse withVms(List<VmDetails> vms) {
-        this.vms.addAll(vms);
-        return this;
+    public String getCid() {
+        return cid;
     }
+
+    public String getJob() {
+        return job;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    @Override
+    public String toString() {
+        return "Vm [agent_id=" + agentId + ", cid=" + cid + ", job=" + job + ", index=" + index + "]";
+    }
+
 }

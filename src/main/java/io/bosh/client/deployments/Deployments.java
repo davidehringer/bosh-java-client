@@ -24,9 +24,9 @@ import rx.Observable;
  */
 public interface Deployments {
 
-    Observable<ListDeploymentsResponse> list();
+    Observable<List<DeploymentSummary>> list();
     
-    Observable<GetDeploymentResponse> get(String deploymentName);
+    Observable<Deployment> get(String deploymentName);
     
     Observable<List<Problem>> cloudcheck(String deploymentName);
 }

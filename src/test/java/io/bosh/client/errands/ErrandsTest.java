@@ -21,8 +21,6 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import io.bosh.client.AbstractDirectorTest;
 
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.MediaType;
@@ -45,10 +43,8 @@ public class ErrandsTest extends AbstractDirectorTest{
         mockServer.expect(requestTo(url("/deployments/test/errands")))//
                 .andRespond(withSuccess(payload("errands/errands.json"), MediaType.TEXT_HTML));
         // When
-        errands.list("test").subscribe(response -> {
+        errands.list("test").subscribe(summaries -> {
             // Then
-            List<ErrandSummary> summaries = response.getErrands();
-            
             assertThat(summaries.size(), is(3));
 
             assertThat(summaries.get(0).getName(), is("broker-registrar"));

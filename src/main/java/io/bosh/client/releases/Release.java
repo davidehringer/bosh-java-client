@@ -19,26 +19,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Release {
 
     private String name;
-    @JsonProperty("release_versions")
-    private List<ReleaseVersion> releaseVersions = new ArrayList<ReleaseVersion>();
+    private List<Job> jobs = new ArrayList<Job>();
+    private List<Package> packages = new ArrayList<Package>();
+    private List<String> versions = new ArrayList<String>();
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getName() {
         return name;
     }
 
-    public List<ReleaseVersion> getVersions() {
-        return releaseVersions;
+    public List<Job> getJobs() {
+        return jobs;
+    }
+
+    public List<Package> getPackages() {
+        return packages;
+    }
+
+    public List<String> getVersions() {
+        return versions;
     }
 
     @Override
     public String toString() {
-        return "ReleaseDetails [name=" + name + ", release_versions=" + releaseVersions + "]";
+        return "ReleaseDetails [name=" + name + ", jobs=" + jobs + ", packages=" + packages
+                + ", versions=" + versions + "]";
     }
 
 }

@@ -19,6 +19,7 @@ import io.bosh.client.internal.AbstractSpringOperations;
 
 import java.net.URI;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.web.client.RestTemplate;
 
@@ -34,15 +35,15 @@ public class SpringReleases extends AbstractSpringOperations implements Releases
     }
 
     @Override
-    public Observable<ListReleasesResponse> list() {
-        return get(Release[].class, 
+    public Observable<List<ReleaseSummary>> list() {
+        return get(ReleaseSummary[].class, 
                 builder -> builder.pathSegment("releases"))
-              .map(results -> new ListReleasesResponse().withReleases(Arrays.asList(results)));
+              .map(results -> Arrays.asList(results));
     }
 
     @Override
-    public Observable<GetReleaseResponse> get(String releaseName) {
-        return get(GetReleaseResponse.class,
+    public Observable<Release> get(String releaseName) {
+        return get(Release.class,
                 builder -> builder.pathSegment("releases", releaseName))
                .map(response -> {
                    response.setName(releaseName);

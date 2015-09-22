@@ -19,6 +19,7 @@ import io.bosh.client.internal.AbstractSpringOperations;
 
 import java.net.URI;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.web.client.RestOperations;
 
@@ -34,8 +35,8 @@ public class SpringErrands extends AbstractSpringOperations implements Errands {
     }
 
     @Override
-    public Observable<ListErrandsResponse> list(String deploymentName) {
+    public Observable<List<ErrandSummary>> list(String deploymentName) {
         return get( ErrandSummary[].class, builder -> builder.pathSegment("deployments", deploymentName, "errands"))
-               .map(response -> new ListErrandsResponse().withErrands(Arrays.asList(response)));
+               .map(response -> Arrays.asList(response));
     }
 }
