@@ -4,6 +4,8 @@
 	<groupId>io.bosh.client</groupId>
 	<artifactId>bosh-java-client</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
+	<name>BOSH Java Client</name>
+	<description>A Java client for the BOSH Director API.</description>
 
 	<organization>
 		<name>Cloud Foundry Community</name>
@@ -23,7 +25,13 @@
 			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
 		</license>
 	</licenses>
-
+	
+	<scm>
+		<connection>scm:git:https://github.com/davidehringer/bosh-java-client.git</connection>
+		<developerConnection>scm:git:https://github.com/davidehringer/bosh-java-client.git</developerConnection>
+		<url>https://github.com/davidehringer/bosh-java-client.git</url>
+	</scm>
+	
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
@@ -40,11 +48,10 @@
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
-
-        <dependency>
-            <groupId>io.reactivex</groupId>
-            <artifactId>rxjava</artifactId>
-            <version>1.0.14</version>
+		<dependency>
+			<groupId>io.reactivex</groupId>
+			<artifactId>rxjava</artifactId>
+			<version>1.0.14</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -65,11 +72,6 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<!-- TODO test only -->
 		</dependency>
 
 		<dependency>
@@ -97,6 +99,11 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
