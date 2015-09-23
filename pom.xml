@@ -119,35 +119,6 @@
 					<target>${java.version}</target>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.4.1</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<relocations>
-								<relocation>
-									<pattern>org.springframework</pattern>
-									<shadedPattern>io.bosh.org.springframework</shadedPattern>
-								</relocation>
-								<relocation>
-									<pattern>com.fasterxml.jackson</pattern>
-									<shadedPattern>io.bosh.com.fasterxml.jackson</shadedPattern>
-								</relocation>
-								<relocation>
-									<pattern>org.apache.http</pattern>
-									<shadedPattern>io.bosh.org.apache.http</shadedPattern>
-								</relocation>
-							</relocations>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 
