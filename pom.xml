@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.bosh.client</groupId>
 	<artifactId>bosh-java-client</artifactId>
-	<version>0.9.0</version>
+	<version>0.9.1-SNAPSHOT</version>
 	<name>BOSH Java Client</name>
 	<description>A Java client for the BOSH Director API.</description>
 	<url>https://github.com/davidehringer/bosh-java-client</url>
@@ -30,7 +30,7 @@
 		<connection>scm:git:https://github.com/davidehringer/bosh-java-client.git</connection>
 		<developerConnection>scm:git:https://github.com/davidehringer/bosh-java-client.git</developerConnection>
 		<url>https://github.com/davidehringer/bosh-java-client.git</url>
-		<tag>bosh-java-client-0.9.0</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<properties>
