@@ -1,8 +1,19 @@
 # Java Client for BOSH
 
-[bosh.io](http://bosh.io)
+A Java client for the [bosh.io](http://bosh.io) Director API.
 
-This client is currently in an beta state and subject to significant changes.
+While the client implements a large portion of the BOSH API, it doesn't yet have full coverage.
+
+## Maven Dependency
+
+The library is available in Maven Central.
+```
+<dependency>
+    <groupId>io.bosh.client</groupId>
+    <artifactId>bosh-java-client</artifactId>
+    <version>${bosh-java-client.version}</version>
+</dependency>
+```
 
 ## Usage
 
@@ -22,6 +33,18 @@ DirectorClient client = new SpringDirectorClientBuilder()
 ```
 
 You can consume the [Observables](http://reactivex.io/RxJava/javadoc/rx/Observable.html) in a variety of ways such as
+examples below. Unless otherwise noted in the API, the Observables returned will only emit a single item.
+
+```
+FetchLogsRequest request = new FetchLogsRequest()
+        .withDeploymentName("my-deployment")
+        .withJobName("my-job")
+        .withJobIndex(2)
+        .withLogType(LogType.JOB);
+InputStream logs = client.jobs().fetchLogs(request).toBlocking().single();
+// do something with the logs
+```
+
 ```
 Deployments deployments = client.deployments();
 deployments.list().subscribe(deploymentList -> {
@@ -36,16 +59,6 @@ deployments.list().subscribe(deploymentList -> {
     }, error -> {
         // handle error
     });
-```
-or
-```
-FetchLogsRequest request = new FetchLogsRequest()
-        .withDeploymentName("my-deployment")
-        .withJobName("my-job")
-        .withJobIndex(2)
-        .withLogType(LogType.JOB);
-InputStream logs = client.jobs().fetchLogs(request).toBlocking().first();
-// do something with the logs
 ```
 
 ## Compatibility
