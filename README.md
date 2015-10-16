@@ -14,6 +14,7 @@ The library is available in Maven Central.
     <version>${bosh-java-client.version}</version>
 </dependency>
 ```
+See Maven Search for [released versions](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22bosh-java-client%22).
 
 ## Usage
 
