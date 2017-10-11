@@ -79,8 +79,8 @@ public class SpringDeployments extends AbstractSpringOperations implements Deplo
     }
 
     @Override
-    public Observable<Task> delete(Deployment deployment, HttpHeaders headers) {
-        return exchangeForEntity("", Task.class, headers, HttpMethod.DELETE,
+    public Observable<Task> delete(Deployment deployment) {
+        return exchangeForEntity("", Task.class, null, HttpMethod.DELETE,
                 builder -> builder.pathSegment("deployments", deployment.getName()))
                 .map(exchange -> exchange.getBody());
     }
