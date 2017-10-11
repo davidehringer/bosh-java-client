@@ -16,6 +16,7 @@
 package io.bosh.client.deployments;
 
 import io.bosh.client.tasks.Task;
+import org.springframework.http.HttpHeaders;
 import rx.Observable;
 
 import java.util.List;
@@ -29,9 +30,9 @@ public interface Deployments {
     
     Observable<Deployment> get(String deploymentName);
 
-    Observable<Task> create(Deployment deployment);
+    Observable<Task> create(Deployment deployment, HttpHeaders headers);
 
-    Observable<Task> delete(Deployment deployment);
+    Observable<Task> delete(Deployment deployment, HttpHeaders headers);
     
     Observable<List<Problem>> cloudcheck(String deploymentName);
 }

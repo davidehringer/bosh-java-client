@@ -103,7 +103,7 @@ public abstract class AbstractSpringOperations {
             builderCallback.accept(builder);
             URI uri = builder.build().toUri();
 
-            RequestEntity<T> requestEntity = new RequestEntity<T>(request, headers, HttpMethod.PUT, uri);
+            RequestEntity<T> requestEntity = new RequestEntity<T>(request, headers, method, uri);
             this.logger.debug("{} {}", method, uri);
             return this.restOperations.exchange( requestEntity, responseType);
         });
