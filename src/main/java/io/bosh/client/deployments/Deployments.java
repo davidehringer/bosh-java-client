@@ -15,9 +15,10 @@
  */
 package io.bosh.client.deployments;
 
-import java.util.List;
-
+import io.bosh.client.tasks.Task;
 import rx.Observable;
+
+import java.util.List;
 
 /**
  * @author David Ehringer
@@ -27,6 +28,10 @@ public interface Deployments {
     Observable<List<DeploymentSummary>> list();
     
     Observable<Deployment> get(String deploymentName);
+
+    Observable<Task> create(Deployment deployment);
+
+    Observable<Task> delete(Deployment deployment);
     
     Observable<List<Problem>> cloudcheck(String deploymentName);
 }

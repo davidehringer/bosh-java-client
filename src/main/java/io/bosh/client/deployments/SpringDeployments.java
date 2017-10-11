@@ -15,22 +15,22 @@
  */
 package io.bosh.client.deployments;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.bosh.client.DirectorException;
 import io.bosh.client.internal.AbstractSpringOperations;
+import io.bosh.client.tasks.Task;
 import io.bosh.client.tasks.Tasks;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.web.client.RestTemplate;
+import rx.Observable;
 
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.web.client.RestTemplate;
-
-import rx.Observable;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 /**
  * @author David Ehringer
@@ -69,6 +69,20 @@ public class SpringDeployments extends AbstractSpringOperations implements Deplo
                    response.setManifestMap(manifestMap);
                    return response;
                });
+    }
+
+    @Override
+    public Observable<Task> create(Deployment deployment) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "text/yaml");
+        return exchangeForEntity(deployment, Task.class, headers, HttpMethod.POST,
+                    builder -> builder.path("deployments"))
+                .map(exchange -> exchange.getBody());
+    }
+
+    @Override
+    public Observable<Task> delete(Deployment deployment) {
+        return null;
     }
 
     @Override

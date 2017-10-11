@@ -16,13 +16,6 @@
 package io.bosh.client.internal;
 
 import io.bosh.client.DirectorException;
-
-import java.net.URI;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -32,8 +25,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.util.UriComponentsBuilder;
-
 import rx.Observable;
+
+import java.net.URI;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author David Ehringer
@@ -81,7 +79,7 @@ public abstract class AbstractSpringOperations {
             builderCallback.accept(builder);
             URI uri = builder.build().toUri();
 
-            this.logger.debug("GET {}", uri);
+            this.logger.debug("POST {}", uri);
             return this.restOperations.postForObject(uri, request, responseType);
         });
     }
