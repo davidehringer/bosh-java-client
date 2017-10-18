@@ -72,8 +72,19 @@ public class SpringDeployments extends AbstractSpringOperations implements Deplo
     }
 
     @Override
+    public Observable<Task> create(Deployment deployment) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "text/yaml");
+        return create(deployment, headers);
+    }
+
+    public Observable<Task> update(Deployment deployment) {
+        return create(deployment);
+    }
+
+    @Override
     public Observable<Task> create(Deployment deployment, HttpHeaders headers) {
-        return exchangeForEntity(deployment, Task.class, headers, HttpMethod.POST,
+        return exchangeForEntity(deployment.getRawManifest(), Task.class, headers, HttpMethod.POST,
                     builder -> builder.path("deployments"))
                 .map(exchange -> exchange.getBody());
     }

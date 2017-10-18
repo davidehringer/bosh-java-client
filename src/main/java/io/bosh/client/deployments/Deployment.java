@@ -43,6 +43,8 @@ public class Deployment {
         return manifest;
     }
 
+    public void setRawManifest(String manifest) { this.manifest = manifest; }
+
     public Map<String, Object> getManifest() {
         return Collections.unmodifiableMap(manifestMap);
     }

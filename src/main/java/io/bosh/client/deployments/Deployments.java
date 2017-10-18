@@ -32,6 +32,10 @@ public interface Deployments {
 
     Observable<Task> create(Deployment deployment, HttpHeaders headers);
 
+    Observable<Task> create(Deployment deployment);
+
+    Observable<Task> update(Deployment deployment);
+
     Observable<Task> delete(Deployment deployment);
     
     Observable<List<Problem>> cloudcheck(String deploymentName);
