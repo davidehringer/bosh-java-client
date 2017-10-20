@@ -23,7 +23,11 @@ import io.bosh.client.tasks.Task;
 import io.bosh.client.tasks.Tasks;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 import rx.Observable;
 
 import java.io.IOException;
@@ -31,6 +35,7 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * @author David Ehringer
@@ -41,6 +46,7 @@ public class SpringDeployments extends AbstractSpringOperations implements Deplo
     
     public SpringDeployments(RestTemplate restTemplate, URI root, Tasks tasks) {
         super(restTemplate, root);
+        restTemplate.getRequestFactory();
         this.tasks = tasks;
     }
 
@@ -84,7 +90,10 @@ public class SpringDeployments extends AbstractSpringOperations implements Deplo
 
     @Override
     public Observable<Task> create(Deployment deployment, HttpHeaders headers) {
-        return exchangeForEntity(deployment.getRawManifest(), Task.class, headers, HttpMethod.POST,
+        return exchange(deployment.getRawManifest(),
+                                 Task.class,
+                                 headers,
+                                 HttpMethod.POST,
                     builder -> builder.path("deployments"))
                 .map(exchange -> exchange.getBody());
     }
@@ -104,4 +113,11 @@ public class SpringDeployments extends AbstractSpringOperations implements Deplo
                 .map(problems -> Arrays.asList(problems));
     }
 
+    protected final <T, R> Observable<ResponseEntity<R>> exchange(T request,
+                                                                           Class<R> responseType, HttpHeaders headers, HttpMethod method, Consumer<UriComponentsBuilder> builderCallback) {
+        return super.exchangeForEntity(request,responseType,headers,method,builderCallback).map(r -> {
+            String taskId = getTaskId(r);
+            return getEntity(responseType, builder -> builder.pathSegment("tasks", taskId)).toBlocking().first();
+        });
+    }
 }
