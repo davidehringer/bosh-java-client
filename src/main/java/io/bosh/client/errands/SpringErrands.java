@@ -19,8 +19,13 @@ import io.bosh.client.internal.AbstractSpringOperations;
 
 import java.net.URI;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
+import io.bosh.client.tasks.Task;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestOperations;
 
 import rx.Observable;
@@ -38,5 +43,18 @@ public class SpringErrands extends AbstractSpringOperations implements Errands {
     public Observable<List<ErrandSummary>> list(String deploymentName) {
         return get( ErrandSummary[].class, builder -> builder.pathSegment("deployments", deploymentName, "errands"))
                .map(response -> Arrays.asList(response));
+    }
+
+    public Observable<Task> runErrand(String deploymentName, String errandName, boolean keep_alive, boolean when_changed) {
+        HashMap<String, Boolean> body = new HashMap();
+        body.put("keep_alive", keep_alive);
+        body.put("when_changed", when_changed);
+        return exchangeWithTaskRedirect(body,
+                                        Task.class,
+                                        new HttpHeaders(),
+                                        HttpMethod.POST,
+                                        builder -> builder.pathSegment("deployments", deploymentName, "errands", errandName, "runs")
+                                       )
+                .map(HttpEntity::getBody);
     }
 }

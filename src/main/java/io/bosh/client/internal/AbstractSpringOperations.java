@@ -130,4 +130,12 @@ public abstract class AbstractSpringOperations {
         }
         throw new IllegalArgumentException("Response does not have a redirect header for a task");
     }
+
+    protected final <T, R> Observable<ResponseEntity<R>> exchangeWithTaskRedirect (T request,
+                                                                                   Class<R> responseType, HttpHeaders headers, HttpMethod method, Consumer<UriComponentsBuilder> builderCallback) {
+        return exchangeForEntity(request,responseType,headers,method,builderCallback).map(r -> {
+            String taskId = getTaskId(r);
+            return getEntity(responseType, builder -> builder.pathSegment("tasks", taskId)).toBlocking().first();
+        });
+    }
 }
