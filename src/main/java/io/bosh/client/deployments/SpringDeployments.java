@@ -62,15 +62,16 @@ public class SpringDeployments extends AbstractSpringOperations implements Deplo
                    builder -> builder.pathSegment("deployments", deploymentName))
                .map(response -> {
                    response.setName(deploymentName);
-
-                   ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-                   Map manifestMap = null;
-                   try {
-                       manifestMap = mapper.readValue(response.getRawManifest(), Map.class);
-                   } catch (IOException e) {
-                       throw new DirectorException("Unable to parse deployment manifest", e);
+                   if(response.getManifest() != null) {
+                       ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+                       Map manifestMap = null;
+                       try {
+                           manifestMap = mapper.readValue(response.getRawManifest(), Map.class);
+                       } catch (IOException e) {
+                           throw new DirectorException("Unable to parse deployment manifest", e);
+                       }
+                       response.setManifestMap(manifestMap);
                    }
-                   response.setManifestMap(manifestMap);
                    return response;
                });
     }
