@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.evoila</groupId>
 	<artifactId>bosh-java-client</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<name>BOSH Java Client</name>
 	<description>A Java client for the BOSH Director API.</description>
 	<url>https://github.com/evoila/bosh-java-client</url>
@@ -30,7 +30,7 @@
 		<connection>scm:git:https://github.com/evoila/bosh-java-client</connection>
 		<developerConnection>scm:git:https://github.com/evoila/bosh-java-client</developerConnection>
 		<url>https://github.com/evoila/bosh-java-client</url>
-		<tag>HEAD</tag>
+		<tag>bosh-java-client-1.0.1</tag>
 	</scm>
 
 	<properties>
@@ -107,6 +107,19 @@
 			<artifactId>logback-classic</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>com.hierynomus</groupId>
+			<artifactId>sshj</artifactId>
+			<version>0.23.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jsch</artifactId>
+			<version>0.1.54</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

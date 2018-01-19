@@ -17,10 +17,13 @@ package io.bosh.client.deployments;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
 import io.bosh.client.DirectorException;
 import io.bosh.client.internal.AbstractSpringOperations;
 import io.bosh.client.tasks.Task;
 import io.bosh.client.tasks.Tasks;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +33,8 @@ import rx.Observable;
 
 import java.io.IOException;
 import java.net.URI;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -111,6 +116,7 @@ public class SpringDeployments extends AbstractSpringOperations implements Deplo
                 .flatMap(task -> get(Problem[].class, builder -> builder.pathSegment("deployments", deploymentName, "problems")))
                 .map(problems -> Arrays.asList(problems));
     }
+
 
 
 }
