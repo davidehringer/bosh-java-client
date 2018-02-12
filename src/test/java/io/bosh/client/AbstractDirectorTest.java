@@ -36,7 +36,7 @@ public abstract class AbstractDirectorTest {
 
     {
         SpringDirectorClient springClient = new SpringDirectorClientBuilder()
-                .withHost("192.168.50.4").withCredentials("admin", "admin").build();
+                .withHost("192.168.50.4").withCredentials("admin", "admin", Authentication.BASIC).build();
         mockServer = MockRestServiceServer.createServer(springClient.restTemplate());
         client = springClient;
     }
