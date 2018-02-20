@@ -36,11 +36,11 @@ public abstract class AbstractDirectorTest {
 
     {
         SpringDirectorClient springClient = new SpringDirectorClientBuilder()
-                .withHost("192.168.50.4").withCredentials("admin", "admin", Authentication.BASIC).build();
+                .withHost("192.168.50.4").withCredentials("admin", "admin", Authentication.BASIC, Scheme.https, 25555).build();
         mockServer = MockRestServiceServer.createServer(springClient.restTemplate());
         client = springClient;
     }
-    
+
 
     protected String url(String url) {
         return "https://192.168.50.4:25555" + url;
