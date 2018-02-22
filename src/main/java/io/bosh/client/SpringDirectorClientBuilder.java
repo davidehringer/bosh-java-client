@@ -29,6 +29,10 @@ import java.util.List;
 
 import javax.net.ssl.SSLContext;
 
+import io.bosh.client.authentication.Authentication;
+import io.bosh.client.authentication.BasicAuth;
+import io.bosh.client.authentication.OAuth;
+import org.apache.http.auth.AUTH;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
@@ -59,24 +63,18 @@ public class SpringDirectorClientBuilder {
     private String password;
     private Authentication auth;
     private Scheme scheme;
-    private boolean unsecure; // Field to Disable HostnameVerifer
     private Integer boshPort;
 
     public SpringDirectorClientBuilder withCredentials(String username, String password, Authentication auth,
-                                                       Scheme scheme, Integer boshPort, boolean unsecure) {
+                                                       Scheme scheme, Integer boshPort) {
         this.username = username;
         this.password = password;
         this.auth = auth;
         this.scheme = scheme;
         this.boshPort = boshPort;
-        this.unsecure = unsecure;
         return this;
     }
 
-    public SpringDirectorClientBuilder withCredentials(String username, String password, Authentication auth,
-                                                       Scheme scheme, Integer boshPort) {
-        return withCredentials(username, password, auth, scheme, boshPort, true);
-    }
 
 
     public SpringDirectorClientBuilder withHost(String host) {
@@ -90,7 +88,7 @@ public class SpringDirectorClientBuilder {
                 .build().toUri();
         RestTemplate restTemplate = null;
         try {
-            restTemplate = new RestTemplate(new BufferingClientHttpRequestFactory(createRequestFactory(host, username, password, auth, scheme, boshPort, unsecure)));
+            restTemplate = new RestTemplate(new BufferingClientHttpRequestFactory(createRequestFactory(host, username, password, auth, scheme, boshPort)));
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -101,7 +99,7 @@ public class SpringDirectorClientBuilder {
     }
 
     private ClientHttpRequestFactory createRequestFactory(String host, String username,
-                                                          String password, Authentication auth, Scheme scheme, Integer boshPort, boolean unsecure) throws URISyntaxException {
+                                                          String password, Authentication auth, Scheme scheme, Integer boshPort) throws URISyntaxException {
 
         SSLContext sslContext = null;
         try {
@@ -116,7 +114,7 @@ public class SpringDirectorClientBuilder {
 
         HttpClient httpClient;
 
-        if (auth.equals(Authentication.BASIC)) {
+        if (auth.getClass().equals(BasicAuth.class)) {
             CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
             credentialsProvider.setCredentials(new AuthScope(host, boshPort),
                     new UsernamePasswordCredentials(username, password));
@@ -129,7 +127,7 @@ public class SpringDirectorClientBuilder {
 
             // disabling redirect handling is critical for the way BOSH uses 302's
             httpClient = HttpClientBuilder.create().disableRedirectHandling()
-                    .setDefaultHeaders(Arrays.asList(new OAuthCredentialsProvider(host, username, password, scheme.name(), unsecure)))
+                    .setDefaultHeaders(Arrays.asList(new OAuthCredentialsProvider(host, username, password, scheme.name(), (OAuth) auth)))
                     .setSSLSocketFactory(connectionFactory).build();
 
         }

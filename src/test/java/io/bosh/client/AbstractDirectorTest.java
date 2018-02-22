@@ -18,10 +18,8 @@ package io.bosh.client;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import io.bosh.client.DirectorClient;
-import io.bosh.client.SpringDirectorClient;
-import io.bosh.client.SpringDirectorClientBuilder;
-
+import io.bosh.client.authentication.Authentication;
+import io.bosh.client.authentication.BasicAuth;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.util.FileCopyUtils;
@@ -36,7 +34,7 @@ public abstract class AbstractDirectorTest {
 
     {
         SpringDirectorClient springClient = new SpringDirectorClientBuilder()
-                .withHost("192.168.50.4").withCredentials("admin", "admin", Authentication.BASIC, Scheme.https, 25555).build();
+                .withHost("192.168.50.4").withCredentials("admin", "admin", new BasicAuth(), Scheme.https, 25555).build();
         mockServer = MockRestServiceServer.createServer(springClient.restTemplate());
         client = springClient;
     }

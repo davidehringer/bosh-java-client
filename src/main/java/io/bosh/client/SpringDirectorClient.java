@@ -40,7 +40,7 @@ import org.springframework.web.client.RestTemplate;
  * @author David Ehringer
  */
 public class SpringDirectorClient implements DirectorClient {
-    
+
     private final RestTemplate restTemplate;
 
     private final Info info;
@@ -63,8 +63,8 @@ public class SpringDirectorClient implements DirectorClient {
         this.jobs = new SpringJobs(restTemplate, root, tasks, deployments);
         this.vms = new SpringVms(restTemplate, root, tasks);
     }
-    
-    public RestTemplate restTemplate(){
+
+    public RestTemplate restTemplate() {
         return restTemplate;
     }
 

@@ -22,7 +22,7 @@ import java.security.cert.X509Certificate;
  */
 public class UnsecureClientCredentialsAccessTokenProvider extends ClientCredentialsAccessTokenProvider {
     @Override
-    protected RestOperations getRestTemplate(){
+    protected RestOperations getRestTemplate() {
         RestTemplate restOperations = (RestTemplate) super.getRestTemplate();
         TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
 

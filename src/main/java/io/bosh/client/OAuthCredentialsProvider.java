@@ -1,5 +1,7 @@
 package io.bosh.client;
 
+import io.bosh.client.authentication.Authentication;
+import io.bosh.client.authentication.OAuth;
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
 import org.apache.http.ParseException;
@@ -33,8 +35,8 @@ public class OAuthCredentialsProvider implements Header {
 
 
     public OAuthCredentialsProvider(String host, String username,
-                                    String password, String scheme, boolean unsecure) throws URISyntaxException {
-        if (unsecure) {
+                                    String password, String scheme, OAuth auth) throws URISyntaxException {
+        if (!auth.isStrictHostKeyChecking()) {
             CHAIN = new AccessTokenProviderChain(
                     Arrays.<AccessTokenProvider>asList(new UnsecureClientCredentialsAccessTokenProvider()));
         } else {
