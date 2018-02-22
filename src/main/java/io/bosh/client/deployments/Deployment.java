@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author David Ehringer
@@ -42,6 +43,8 @@ public class Deployment {
     public String getRawManifest() {
         return manifest;
     }
+
+    public void setRawManifest(String manifest) { this.manifest = manifest; }
 
     public Map<String, Object> getManifest() {
         return Collections.unmodifiableMap(manifestMap);

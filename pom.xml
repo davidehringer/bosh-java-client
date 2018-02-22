@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>io.bosh.client</groupId>
+	<groupId>de.evoila</groupId>
 	<artifactId>bosh-java-client</artifactId>
-	<version>0.9.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<name>BOSH Java Client</name>
 	<description>A Java client for the BOSH Director API.</description>
-	<url>https://github.com/davidehringer/bosh-java-client</url>
+	<url>https://github.com/evoila/bosh-java-client</url>
 
 	<organization>
 		<name>Cloud Foundry Community</name>
@@ -27,10 +27,10 @@
 	</licenses>
 
 	<scm>
-		<connection>scm:git:https://github.com/davidehringer/bosh-java-client.git</connection>
-		<developerConnection>scm:git:https://github.com/davidehringer/bosh-java-client.git</developerConnection>
-		<url>https://github.com/davidehringer/bosh-java-client.git</url>
-		<tag>HEAD</tag>
+		<connection>scm:git:https://github.com/evoila/bosh-java-client</connection>
+		<developerConnection>scm:git:https://github.com/evoila/bosh-java-client</developerConnection>
+		<url>https://github.com/evoila/bosh-java-client</url>
+		<tag>bosh-java-client-1.0.1</tag>
 	</scm>
 
 	<properties>
@@ -71,6 +71,11 @@
 			<artifactId>httpclient</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.security.oauth</groupId>
+			<artifactId>spring-security-oauth2</artifactId>
+			<version>2.0.7.RELEASE</version>
+		</dependency>
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
@@ -107,6 +112,19 @@
 			<artifactId>logback-classic</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>com.hierynomus</groupId>
+			<artifactId>sshj</artifactId>
+			<version>0.23.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jsch</artifactId>
+			<version>0.1.54</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

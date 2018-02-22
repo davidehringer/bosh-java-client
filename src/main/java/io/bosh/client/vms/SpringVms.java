@@ -15,16 +15,25 @@
  */
 package io.bosh.client.vms;
 
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Session;
 import io.bosh.client.DirectorException;
+import io.bosh.client.deployments.SSHConfig;
 import io.bosh.client.internal.AbstractSpringOperations;
+import io.bosh.client.tasks.Task;
 import io.bosh.client.tasks.Tasks;
 
 import java.io.IOException;
 import java.net.URI;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestOperations;
 
 import rx.Observable;
@@ -71,6 +80,43 @@ public class SpringVms extends AbstractSpringOperations implements Vms {
                 }
                 return details;
              }));
+    }
+
+
+    public Observable<Session> ssh(SSHConfig config) {
+        KeyPairGenerator keyGen = null;
+        try {
+            keyGen = KeyPairGenerator.getInstance("RSA");
+        } catch (NoSuchAlgorithmException e) {
+            throw new DirectorException("Unable to generate SSH-Keypair" , e);
+        }
+        keyGen.initialize(1024);
+        KeyPair keyPair =keyGen.generateKeyPair();
+        config = new SSHConfig(config, keyPair.getPublic().getEncoded().toString());
+        return this.ssh(config, keyPair.getPrivate().getEncoded().toString());
+    }
+
+    public Observable<Session> ssh(SSHConfig config, String privateKey){
+        return exchangeWithTaskRedirect(config,
+                                        Task.class,
+                                        null,
+                                        HttpMethod.POST,
+                                        builder -> builder.pathSegment("deployments", config.getDeploymentName(), "ssh"))
+                     .map(exchange -> exchange.getBody())
+                     .map(body -> {
+                         List<Vm> vms = listDetails(config.getDeploymentName()).toBlocking().first();
+                         Vm vm = vms.get(config.getTarget().getIndexes());
+
+                         JSch jsch=new JSch();
+                         Session session = null;
+                         try {
+                             jsch.addIdentity(privateKey);
+                             session = jsch.getSession(config.getParams().getUser(), vm.getIps().get(0), 22);
+                         } catch (JSchException e) {
+                             throw new DirectorException("Unable to create ssh connection to " + vm.getJobName() + vm.getIndex(), e);
+                         }
+                         return session;
+                     });
     }
 
 }

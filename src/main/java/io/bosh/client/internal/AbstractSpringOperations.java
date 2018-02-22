@@ -16,13 +16,6 @@
 package io.bosh.client.internal;
 
 import io.bosh.client.DirectorException;
-
-import java.net.URI;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -32,8 +25,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.util.UriComponentsBuilder;
-
 import rx.Observable;
+
+import java.net.URI;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author David Ehringer
@@ -81,7 +79,7 @@ public abstract class AbstractSpringOperations {
             builderCallback.accept(builder);
             URI uri = builder.build().toUri();
 
-            this.logger.debug("GET {}", uri);
+            this.logger.debug("POST {}", uri);
             return this.restOperations.postForObject(uri, request, responseType);
         });
     }
@@ -105,7 +103,7 @@ public abstract class AbstractSpringOperations {
             builderCallback.accept(builder);
             URI uri = builder.build().toUri();
 
-            RequestEntity<T> requestEntity = new RequestEntity<T>(request, headers, HttpMethod.PUT, uri);
+            RequestEntity<T> requestEntity = new RequestEntity<T>(request, headers, method, uri);
             this.logger.debug("{} {}", method, uri);
             return this.restOperations.exchange( requestEntity, responseType);
         });
@@ -131,5 +129,13 @@ public abstract class AbstractSpringOperations {
             return matcher.group(1);
         }
         throw new IllegalArgumentException("Response does not have a redirect header for a task");
+    }
+
+    protected final <T, R> Observable<ResponseEntity<R>> exchangeWithTaskRedirect (T request,
+                                                                                   Class<R> responseType, HttpHeaders headers, HttpMethod method, Consumer<UriComponentsBuilder> builderCallback) {
+        return exchangeForEntity(request,responseType,headers,method,builderCallback).map(r -> {
+            String taskId = getTaskId(r);
+            return getEntity(responseType, builder -> builder.pathSegment("tasks", taskId)).toBlocking().first();
+        });
     }
 }
