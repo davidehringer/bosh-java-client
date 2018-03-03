@@ -19,20 +19,17 @@ import static org.springframework.http.converter.json.AbstractJackson2HttpMessag
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.net.ssl.SSLContext;
 
-import io.bosh.client.authentication.Authentication;
-import io.bosh.client.authentication.BasicAuth;
-import io.bosh.client.authentication.OAuth;
-import org.apache.http.auth.AUTH;
+import org.apache.http.Header;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
@@ -49,49 +46,55 @@ import org.springframework.http.client.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.oauth2.client.token.AccessTokenProvider;
+import org.springframework.security.oauth2.client.token.AccessTokenProviderChain;
+import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsAccessTokenProvider;
+import org.springframework.security.oauth2.client.token.grant.implicit.ImplicitAccessTokenProvider;
+import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordAccessTokenProvider;
+import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-
+import org.springframework.security.oauth2.common.*;
 
 /**
  * @author David Ehringer
  */
 public class SpringDirectorClientBuilder {
 
+    private Scheme scheme;
+    private int port;
     private String host;
     private String username;
     private String password;
     private Authentication auth;
-    private Scheme scheme;
-    private Integer boshPort;
 
-    public SpringDirectorClientBuilder withCredentials(String username, String password, Authentication auth,
-                                                       Scheme scheme, Integer boshPort) {
+    public SpringDirectorClientBuilder withCredentials(String username, String password, Authentication auth){
         this.username = username;
         this.password = password;
         this.auth = auth;
-        this.scheme = scheme;
-        this.boshPort = boshPort;
         return this;
     }
 
+    public SpringDirectorClientBuilder withScheme(Scheme scheme){
+        this.scheme = scheme;
+        return this;
+    }
 
+    public SpringDirectorClientBuilder withPort(int port){
+        this.port = port;
+        return this;
+    }
 
-    public SpringDirectorClientBuilder withHost(String host) {
+    public SpringDirectorClientBuilder withHost(String host){
         this.host = host;
         return this;
     }
 
-    public SpringDirectorClient build() {
+    public SpringDirectorClient build(){
         // TODO validate
-        URI root = UriComponentsBuilder.newInstance().scheme(scheme.name()).host(host).port(boshPort)
+        URI root = UriComponentsBuilder.newInstance().scheme(scheme.name()).host(host).port(port)
                 .build().toUri();
-        RestTemplate restTemplate = null;
-        try {
-            restTemplate = new RestTemplate(new BufferingClientHttpRequestFactory(createRequestFactory(host, username, password, auth, scheme, boshPort)));
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
+        RestTemplate restTemplate = new RestTemplate(new BufferingClientHttpRequestFactory(createRequestFactory(host, username, password, auth)));
         restTemplate.getInterceptors().add(new ContentTypeClientHttpRequestInterceptor());
         restTemplate.getInterceptors().add(new RequestLoggingInterceptor());
         handleTextHtmlResponses(restTemplate);
@@ -99,7 +102,7 @@ public class SpringDirectorClientBuilder {
     }
 
     private ClientHttpRequestFactory createRequestFactory(String host, String username,
-                                                          String password, Authentication auth, Scheme scheme, Integer boshPort) throws URISyntaxException {
+                                                          String password, Authentication auth) {
 
         SSLContext sslContext = null;
         try {
@@ -114,9 +117,9 @@ public class SpringDirectorClientBuilder {
 
         HttpClient httpClient;
 
-        if (auth.getClass().equals(BasicAuth.class)) {
+        if(auth.equals(Authentication.BASIC)){
             CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-            credentialsProvider.setCredentials(new AuthScope(host, boshPort),
+            credentialsProvider.setCredentials(new AuthScope(host, 25555),
                     new UsernamePasswordCredentials(username, password));
 
             // disabling redirect handling is critical for the way BOSH uses 302's
@@ -127,7 +130,7 @@ public class SpringDirectorClientBuilder {
 
             // disabling redirect handling is critical for the way BOSH uses 302's
             httpClient = HttpClientBuilder.create().disableRedirectHandling()
-                    .setDefaultHeaders(Arrays.asList(new OAuthCredentialsProvider(host, username, password, scheme.name(), (OAuth) auth)))
+                    .setDefaultHeaders(Arrays.asList(new OAuthCredentialsProvider(host, username, password)))
                     .setSSLSocketFactory(connectionFactory).build();
 
         }

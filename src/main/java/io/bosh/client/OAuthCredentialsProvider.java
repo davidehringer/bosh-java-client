@@ -1,7 +1,5 @@
 package io.bosh.client;
 
-import io.bosh.client.authentication.Authentication;
-import io.bosh.client.authentication.OAuth;
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
 import org.apache.http.ParseException;
@@ -21,8 +19,6 @@ import org.springframework.security.oauth2.common.AuthenticationScheme;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.util.Assert;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 
 /**
@@ -30,43 +26,34 @@ import java.util.Arrays;
  */
 public class OAuthCredentialsProvider implements Header {
     private OAuth2AccessToken token;
-    private AccessTokenProviderChain CHAIN;
-    private ClientCredentialsResourceDetails credentials = new ClientCredentialsResourceDetails();
+    private AccessTokenProviderChain CHAIN = new AccessTokenProviderChain(
+            Arrays.<AccessTokenProvider> asList(new UnsecureClientCredentialsAccessTokenProvider()));
+    private  ClientCredentialsResourceDetails credentials = new ClientCredentialsResourceDetails();
 
 
     public OAuthCredentialsProvider(String host, String username,
-                                    String password, String scheme, OAuth auth) throws URISyntaxException {
-        if (!auth.isStrictHostKeyChecking()) {
-            CHAIN = new AccessTokenProviderChain(
-                    Arrays.<AccessTokenProvider>asList(new UnsecureClientCredentialsAccessTokenProvider()));
-        } else {
-            CHAIN = new AccessTokenProviderChain(
-                    Arrays.<AccessTokenProvider>asList(new ClientCredentialsAccessTokenProvider()));
-        }
-        URI uri = new URI(scheme + host + ":8443/oauth/token");
-
-        getCredentials(uri.toString(), username, password);
+                                    String password){
+        host="https://" + host + ":8443/oauth/token";
+        getCredentials(host, username, password);
         requestToken();
     }
-
-    private void requestToken() {
+    private void requestToken(){
 
         if (token == null) {
             token = CHAIN.obtainAccessToken(credentials, new DefaultAccessTokenRequest());
-        } else if (token.isExpired()) {
+        }
+        else if (token.isExpired()) {
             refreshAccessToken();
         }
 
     }
-
     private void refreshAccessToken() {
         Assert.notNull(token);
 
         token = CHAIN.refreshAccessToken(credentials, token.getRefreshToken(), new DefaultAccessTokenRequest());
     }
-
     private ClientCredentialsResourceDetails getCredentials(String host, String username,
-                                                            String password) {
+                                                            String password){
         credentials.setAccessTokenUri(host);
         credentials.setClientAuthenticationScheme(AuthenticationScheme.form);
         credentials.setClientId(username);
@@ -82,7 +69,7 @@ public class OAuthCredentialsProvider implements Header {
 
     @Override
     public String getValue() {
-        return token.getTokenType() + " " + token.getValue();
+        return token.getTokenType()+ " "+ token.getValue();
     }
 
     @Override
