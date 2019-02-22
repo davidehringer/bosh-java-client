@@ -2,6 +2,9 @@ package io.bosh.client.deployments;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * @author Johannes Hiemer.
+ */
 public class SSHConfig {
 
     public SSHConfig(String deploymentName, String username, String publicKey, String jobTarget, int indexes) {

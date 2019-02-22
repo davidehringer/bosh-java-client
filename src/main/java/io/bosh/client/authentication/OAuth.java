@@ -1,5 +1,8 @@
 package io.bosh.client.authentication;
 
+/**
+ * @author Jannik Heyl.
+ */
 public class OAuth implements Authentication {
 
     private boolean strictHostKeyChecking;

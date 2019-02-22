@@ -18,9 +18,10 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 
 /**
- * Created by jannikheyl on 12.02.18.
+ * @author Jannik Heyl.
  */
 public class UnsecureClientCredentialsAccessTokenProvider extends ClientCredentialsAccessTokenProvider {
+
     @Override
     protected RestOperations getRestTemplate(){
         RestTemplate restOperations = (RestTemplate) super.getRestTemplate();

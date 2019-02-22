@@ -10,9 +10,10 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 
 /**
- * Created by jannikheyl on 12.02.18.
+ * @author Jannik Heyl.
  */
 public class RequestLoggingInterceptor implements ClientHttpRequestInterceptor {
+
     private final static org.slf4j.Logger log = LoggerFactory.getLogger(RequestLoggingInterceptor.class);
 
     @Override

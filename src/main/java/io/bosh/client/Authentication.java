@@ -1,8 +1,8 @@
 package io.bosh.client;
 
 /**
- * Created by jannikheyl on 09.02.18.
+ * @author Jannik Heyl.
  */
 public enum Authentication {
-    BASIC,OAUTH
+    BASIC, OAUTH;
 }

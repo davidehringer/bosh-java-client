@@ -22,21 +22,24 @@ import org.springframework.util.Assert;
 import java.util.Arrays;
 
 /**
- * Created by jannikheyl on 09.02.18.
+ * @author Jannik Heyl.
  */
 public class OAuthCredentialsProvider implements Header {
+
     private OAuth2AccessToken token;
+
     private AccessTokenProviderChain CHAIN = new AccessTokenProviderChain(
-            Arrays.<AccessTokenProvider> asList(new UnsecureClientCredentialsAccessTokenProvider()));
+            Arrays.asList(new UnsecureClientCredentialsAccessTokenProvider()));
+
     private  ClientCredentialsResourceDetails credentials = new ClientCredentialsResourceDetails();
 
 
-    public OAuthCredentialsProvider(String host, String username,
-                                    String password){
+    public OAuthCredentialsProvider(String host, String username, String password){
         host="https://" + host + ":8443/oauth/token";
         getCredentials(host, username, password);
         requestToken();
     }
+
     private void requestToken(){
 
         if (token == null) {
@@ -47,11 +50,13 @@ public class OAuthCredentialsProvider implements Header {
         }
 
     }
+
     private void refreshAccessToken() {
         Assert.notNull(token);
 
         token = CHAIN.refreshAccessToken(credentials, token.getRefreshToken(), new DefaultAccessTokenRequest());
     }
+
     private ClientCredentialsResourceDetails getCredentials(String host, String username,
                                                             String password){
         credentials.setAccessTokenUri(host);
